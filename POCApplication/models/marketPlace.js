@@ -1,17 +1,17 @@
-var mongoose=require('mongoose');
+var mongoose = require('mongoose');
 
-var marketPlaceSchema=mongoose.model('marketPlace',{
-    marketPlaceName:{type:String},
-    logo:{type:String},
-    description:{type:String},
-    isAuthenticationRequired:{type:Boolean},
-    categoryId:{
-    type: Schema.Types.ObjectId,
-    ref: 'master'
+var marketPlaceSchema = {
+    marketPlaceName: { type: String },
+    logo: { type: String },
+    description: { type: String },
+    isAuthenticationRequired: { type: Boolean },
+    categoryId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Master'
     },
-    isAuthenticationTypeId:{
-    type: Schema.Types.ObjectId,
-    ref: 'master'
+    isAuthenticationTypeId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Master'
     }
-});
-module.exports=categorySchema;
+};
+module.exports = mongoose.model('Marketplace', marketPlaceSchema);

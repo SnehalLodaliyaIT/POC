@@ -1,10 +1,12 @@
-var mongoose=require('mongoose');
+var mongoose = require('mongoose');
 
-var marketPlaceSchema=mongoose.model('user',{
-    marketPlaceId:{
-    type: Schema.Types.ObjectId,
-    ref: 'marketPlace'
-    }
-    
-});
-module.exports=categorySchema;
+var userSchema = {
+    marketPlaceId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Marketplace'
+    },
+    username: {
+        type: String
+    },
+};
+module.exports = mongoose.model('User', userSchema);

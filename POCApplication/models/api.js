@@ -1,15 +1,15 @@
-var mongoose=require('mongoose');
+var mongoose = require('mongoose');
 
-var marketPlaceSchema=mongoose.model('api',{
-    marketPlaceId:{
-    type: Schema.Types.ObjectId,
-    ref: 'marketPlace'
+var apiSchema = {
+    marketPlaceId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'marketPlace'
     },
-    MethodType:{type:String},
-    Url:{type:String},
-    parameters:{type:Array},
-    respone:{type:Array},
-    Description:{type:String}
-   
-});
-module.exports=categorySchema;
+    MethodType: { type: String },
+    Url: { type: String },
+    parameters: { type: Array },
+    respone: { type: Array },
+    Description: { type: String }
+
+};
+module.exports = mongoose.model('Apis', apiSchema);
