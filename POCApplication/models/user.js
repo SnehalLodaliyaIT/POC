@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var userSchema = {
     marketPlaceId: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Marketplace'
     },
     username: {

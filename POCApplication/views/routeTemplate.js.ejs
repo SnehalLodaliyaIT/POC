@@ -1,0 +1,8 @@
+const express = require("express");
+const router = express.Router();
+
+router.<%-METHOD%>("/<%-GETURL%>", (req, res) => {
+    res.send('Hello');
+})
+
+module.exports = router;

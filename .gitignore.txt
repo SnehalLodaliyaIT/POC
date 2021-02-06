@@ -1,2 +1,0 @@
-node_modules
-POCApplication/node_modules
