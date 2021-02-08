@@ -3,13 +3,14 @@ var mongoose = require('mongoose');
 var apiSchema = {
     marketPlaceId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'marketPlace'
+        ref: 'Marketplace'
     },
-    MethodType: { type: String },
-    Url: { type: String },
+    methodRoute: { type: String },
+    methodType: { type: String },
+    url: { type: String },
     parameters: { type: Array },
-    respone: { type: Array },
-    Description: { type: String }
+    response: { type: Array },
+    description: { type: String }
 
 };
 module.exports = mongoose.model('Apis', apiSchema);

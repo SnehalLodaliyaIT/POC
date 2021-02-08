@@ -3,6 +3,8 @@ const path = require('path');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const Marketplace = require('./models/marketPlace');
+const Apis = require('./models/api');
 
 const ejs = require('ejs');
 const util = require('util');
@@ -17,6 +19,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const masterRouter = require('./routes/master');
 const testRouter = require('./routes/test');
+const { ConnectionBase } = require('mongoose');
 const port = process.env.PORT || '3000';
 const app = express();
 
@@ -82,9 +85,14 @@ function write(file, str, mode) {
 
 async function createRoutes(dir) {
     let app = loadTemplate('routeTemplate.js');
-    app.locals.DB_MODEL = "Test"
-    app.locals.METHOD = "get"
-    app.locals.GETURL = "/"
+    let data = new Array();
+    let marketPlaceName = "github";
+    let marketPlaceData = await Marketplace.findOne({ marketPlaceName: marketPlaceName });
+    let apiData = await Apis.find({ marketPlaceId: marketPlaceData._id });
+    apiData.forEach(element => {
+        data.push(element);
+    });
+    app.locals.data = data;
     write(path.join(dir, './routes/test.js'), app.render());
 }
 

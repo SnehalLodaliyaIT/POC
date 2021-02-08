@@ -44,6 +44,7 @@ router.post('/api', function(req, res) {
     let ap = new api({
         marketPlaceId: req.body.marketPlaceId,
         methodType: req.body.methodType,
+        methodRoute: req.body.methodRoute,
         url: req.body.url,
         parameters: req.body.parameters,
         respone: req.body.respone,

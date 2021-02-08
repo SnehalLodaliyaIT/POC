@@ -1,8 +1,28 @@
 const express = require("express");
 const router = express.Router();
+const https = require('https');
 
-router.<%-METHOD%>("/<%-GETURL%>", (req, res) => {
-    res.send('Hello');
-})
+<% data.forEach((element)=>{ -%>
+    router.<%- element.methodType%>(<%= element.methodRoute%>,(req,res)=>{
+        let options = {
+            url : <%= element.url%>
+        }
+        if(element.parameters){
+            <% for(let i=0;i < (element.parameters).length;i++) {-%>
+            Object.assign(options,{<%= element.parameters[i]%>:req.body.<%- element.parameters[i]%>})
+            <% }-%>
+            
+        }
+        https.<%- element.methodType%>(options,(response)=>{
+            let anyData = {};
+            response.on('data',(chunk)=>{
+                anyData +=chunk;;
+            });
 
+            response.on('end',()=>{
+                res.send(anyData);
+            })
+        })
+    });
+<% }); -%>
 module.exports = router;
