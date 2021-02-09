@@ -1,12 +1,14 @@
 var mongoose = require('mongoose');
 
 var userSchema = {
-    marketPlaceId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Marketplace'
-    },
-    username: {
+    userName: {
         type: String
     },
+    fullName: {
+        type: String
+    },
+    emailId: {
+        type: String
+    }
 };
 module.exports = mongoose.model('User', userSchema);
