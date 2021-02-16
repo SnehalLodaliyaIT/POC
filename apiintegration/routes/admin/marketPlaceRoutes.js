@@ -11,6 +11,8 @@ router.route("/:id").get(marketPlaceController.getmarketPlace)
 router.route("/updateBulk").get(marketPlaceController.bulkUpdatemarketPlace)
 router.route("/update/:id").get(marketPlaceController.updatemarketPlace)
 
+router.route("/addRouteInFile/:id").get(marketPlaceController.updatemarketPlace)
+
 
 
 

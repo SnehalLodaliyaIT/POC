@@ -11,7 +11,7 @@ router.route("/:id").get(apisController.getapis)
 router.route("/updateBulk").get(apisController.bulkUpdateapis)
 router.route("/update/:id").get(apisController.updateapis)
 
-
+router.route("/addRouteInFile/").post(apisController.addAPIInFile)
 
 
 router.route("/delete/:id").delete(apisController.deleteapis)
