@@ -1,0 +1,3 @@
+node_modules
+POCApplication/node_modules
+apiintegration/node_modules

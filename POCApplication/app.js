@@ -19,9 +19,9 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const masterRouter = require('./routes/master');
 const testRouter = require('./routes/test');
-const { ConnectionBase } = require('mongoose');
-const port = process.env.PORT || '3000';
-const app = express();
+const marketPlaceOfUserRouter = require('./routes/marketPlaceOfUser')
+var port = process.env.PORT || '3000';
+var app = express();
 
 app.set('view engine', 'ejs');
 app.use(logger('dev'));
@@ -58,6 +58,8 @@ app.use('/admin', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin/master', masterRouter);
 app.use('/test', testRouter);
+app.use('/user/marketPlacesOfUser', marketPlaceOfUserRouter);
+
 module.exports = app;
 app.listen(port, () => console.log(`server running on port ${port}`))
 
