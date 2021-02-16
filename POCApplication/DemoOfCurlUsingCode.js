@@ -32,3 +32,6 @@ module.exports = router;
 //   -d limit=3 \
 //   -d limit=3 \
 //   -G
+
+//curl https://api.stripe.com/v1/charges \
+  //-u sk_test_51IGOMfBuOumXPWbaDEIJsTcnOJY2QdFc1CPiqLLjLmypWdoRzIFrCvPBduVUXeOhTELNxyM2V36s0xkdlh4v2t9E005eCsYGcr:

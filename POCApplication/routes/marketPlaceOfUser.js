@@ -149,4 +149,5 @@ router.put('/user/marketPlacesOfUser/updateMarketPlacesOfUser', async (req, res,
 
 });
 
+
 module.exports=router;
