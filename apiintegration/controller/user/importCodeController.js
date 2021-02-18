@@ -8,7 +8,7 @@ const generateImportCode = async(req, res) => {
     try {
         
     
-         return  utils.successResponse(result, res);
+         return  utils.successResponse({}, res);
     } catch (error) {
         return utils.failureResponse(error,res)
     }

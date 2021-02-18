@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const apisController = require("../../controller/admin/apisController")
+const importCodeController = require("../../controller/user/importCodeController")
 
-router.route("/generateImportCode").post(apisController.generateImportCode)
+router.route("/generateImportCode").post(importCodeController.generateImportCode)
 
 
     
