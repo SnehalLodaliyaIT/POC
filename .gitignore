@@ -1,3 +1,4 @@
 node_modules
 POCApplication/node_modules
 apiintegration/node_modules
+apiintegration/package-lock.json
