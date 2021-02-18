@@ -6,7 +6,7 @@ const service = require("../../utils/dbService");
 const fs = require("fs");
 const path = require("path");
 const pathOfStore = path.join(__dirname, '../../', 'store/');
-const _=require('lodash');
+const _ = require('lodash');
 
 
 const addapis = async (req, res) => {
@@ -146,7 +146,6 @@ const deleteapis = async (req, res) => {
 
 }
 
-// for soft delete - request { isSoftDelete : true }
 const addAPIInFile = async (req, res) => {
 
     try {
@@ -156,36 +155,69 @@ const addAPIInFile = async (req, res) => {
             let rawData = fs.readFileSync(`${pathOfStore}${params.marketPlaceName}.json`);
             let thirdPartyData = JSON.parse(rawData);
             if (rawData) {
-                let moduleData=_.map(thirdPartyData.modules,function(module){
-                    if(module.moduleId===params.modules[0].moduleId){
-                        let apiData=_.map(module.apis,function(api){
-                            if(api.apiId===params.modules[0].apis[0].apiId){
-                                let languageCode=_.map(api.languageWiseCode,function(languageCode){
-                                    if(languageCode.languageCode!== params.modules[0].apis[0].languageWiseCode[0].languageCode){
-                                        api.languageWiseCode.push(params.modules[0].apis[0].languageWiseCode[0]);
-                                        fs.writeFileSync(`${pathOfStore}${params.marketPlaceName}.json`, JSON.stringify(thirdPartyData, null, 2));
-                                    }
-                                })
-                            }
-                        })
-                    }else{
-                        console.log("module doesn't exists");
+
+                data = _.filter(params.modules, function (module) {
+                    let moduleDescription = _.find(
+                        thirdPartyData.modules, function (obj) {
+                            return obj.moduleId === module.moduleId;
+                        }
+                    );
+
+                    if (moduleDescription == null) {
+                        thirdPartyData.modules.push(module);
+                        fs.writeFileSync(`${pathOfStore}${params.marketPlaceName}.json`, JSON.stringify(thirdPartyData, null, 2));
+                    } else {
+                        updateLanguageCodeInApi(params.marketPlaceName, module, moduleDescription, thirdPartyData);
                     }
-                })
+                    return thirdPartyData.modules;
+                });
+
+                return utils.successResponse({}, res);
             } else {
-
-
+                return utils.failureResponse(error, res)
             }
-        }else{
+        } else {
             fs.writeFileSync(`${pathOfStore}${params.marketPlaceName}.json`, JSON.stringify(params, null, 2));
+            return utils.successResponse({}, res);
         }
 
-
-
-        return utils.successResponse({}, res);
     } catch (error) {
         console.log(error)
         return utils.failureResponse(error, res)
+    }
+
+}
+
+const updateLanguageCodeInApi = async (marketPlaceName, module, moduleDescription, thirdPartyData) => {
+
+    try {
+        apiData = _.filter(module.apis, function (api) {
+            let apiDescription = _.find(
+                moduleDescription.apis, function (obj) {
+                    return obj.apiId === api.apiId;
+                }
+            );
+            if (apiDescription == null) {
+                moduleDescription.apis.push(api);
+            } else {
+                languageCodeData = _.find(api.languageWiseCode, function (language) {
+                    let languageCodeDescription = _.find(apiDescription.languageWiseCode, function (obj) {
+                        return obj.languageCode === language.languageCode;
+                    })
+                    if (languageCodeDescription == null) {
+                        apiDescription.languageWiseCode.push(language)
+                    } else {
+
+                    }
+                    fs.writeFileSync(`${pathOfStore}${marketPlaceName}.json`, JSON.stringify(thirdPartyData, null, 2));
+                })
+            }
+            fs.writeFileSync(`${pathOfStore}${marketPlaceName}.json`, JSON.stringify(thirdPartyData, null, 2));
+            return apiDescription;
+        });
+    } catch (error) {
+        console.log(error)
+        return null;
     }
 
 }
@@ -201,4 +233,5 @@ module.exports = {
     bulkUpdateapis,
     deleteapis,
     addAPIInFile,
+    updateLanguageCodeInApi
 }
