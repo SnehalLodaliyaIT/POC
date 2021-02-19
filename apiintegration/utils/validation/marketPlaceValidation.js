@@ -6,7 +6,7 @@ exports.schemaKeys = {
 	description: joi.string(),
 	isAuthenticationRequired: joi.boolean(),
 	categoryId: joi.string(),
-	authenticationTypeId: joi.string(),
+	authenticationTypeId: joi.array().items(joi.string()),
 	isDeleted: joi.boolean(),
 	isActive: joi.boolean()
 };

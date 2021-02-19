@@ -1,0 +1,9 @@
+{
+    "appName" : <%- JSON.stringify(appName) %>,
+    "authentication" : {
+        <% for (let i=0;i < authentication.length; i++ ) { %>
+            <%- JSON.stringify(authentication[i]) %>:"Your Key" <% if ((authentication.length - 1) 
+            != i ) { %> , <% } %>
+        <% } %>
+    }
+}

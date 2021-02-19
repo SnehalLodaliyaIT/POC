@@ -23,28 +23,26 @@ mongoosePaginate.paginate.options = {
 };
 
 const Schema = mongoose.Schema;
-const schema = new Schema(
-    {
-	name: {
-		type: String,
-		unique: true,
-		uniqueCaseInsensitive: true
-	},
-	normalizeName: String,
-	slug: String,
-	code: String,
-	group: String,
-	description: String,
-	isActive: Boolean,
-	parentId: {
-		type: Schema.Types.ObjectId,
-		ref: "master"
-	},
-	isDeleted: Boolean,
-	parentName: String
-},
-    { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
-);
+const schema = new Schema({
+    name: {
+        type: String,
+        unique: true,
+        uniqueCaseInsensitive: true
+    },
+    normalizeName: String,
+    slug: String,
+    code: String,
+    group: String,
+    description: String,
+    isActive: Boolean,
+    likeKeywords: [String],
+    parentId: {
+        type: Schema.Types.ObjectId,
+        ref: "master"
+    },
+    isDeleted: Boolean,
+    parentName: String
+}, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } });
 
 schema.pre('save', function(next) {
     this.isDeleted = false;
@@ -52,7 +50,7 @@ schema.pre('save', function(next) {
     next();
 });
 
-schema.method("toJSON", function () {
+schema.method("toJSON", function() {
     const { __v, _id, ...object } = this.toObject();
     object.id = _id;
     return object;
@@ -65,5 +63,5 @@ schema.plugin(uniqueValidator);
 
 
 
-const master = mongoose.model("master",schema,"master");
+const master = mongoose.model("master", schema, "master");
 module.exports = master
