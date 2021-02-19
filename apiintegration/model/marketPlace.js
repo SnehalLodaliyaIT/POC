@@ -38,7 +38,7 @@ const schema = new Schema(
 		ref: "master"
 	},
 	authenticationTypeId: {
-		type: Schema.Types.ObjectId,
+		type: [Schema.Types.ObjectId],
 		ref: "master"
 	},
 	isDeleted: Boolean,

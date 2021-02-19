@@ -2,6 +2,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const fs = require('fs');
+const got = require("got");
+const marketPlace = require('./model/marketPlace');
+const master = require('./model/master');
+const _ = require('lodash');
+
 
 const ejs = require('ejs');
 const util = require('util');
@@ -10,7 +16,8 @@ const MODE_0666 = parseInt('0666', 8);
 //const TEMPLATE_DIR = path.join(__dirname, 'views')
 var app = express();
 
-const routes = require("./routes/index")
+const routes = require("./routes/index");
+const { required } = require('joi');
 
 
 app.use(logger('dev'));
@@ -21,15 +28,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.get("/", (req, res) => {
-    const appName = "RazorPay";
-    const authentication = "SecretKey";
-    let data = {
-            appName: appName,
-            authentication: authentication
-        },
-
-
+app.get("/", async (req, res) => {
+    const appName = "DemoApp";
+    let data = await marketPlace.findOne({marketPlaceName:"RazorPay"});
+    let authentication = _.map(data.authenticationTypeId,a=>{
+        return a;
+    });
+    authentication = await master.find({_id: authentication });
+    authentication = _.map(authentication,a=>{
+        return a.name;
+    });
+    console.log(authentication);
+    let app = loadTemplate('authentication/js');
+    app.locals.appName = appName;
+    app.locals.authentication = authentication;
+    //const params = req.params.secretkey;
+    //app.locals.key = "FBvS9T2qXgPe3FNLg12FZ8aR";
+    const dir = "/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/";
+    write(path.join(dir, './authentication.json'), app.render());
+    res.send("ok");
 })
 
 function loadTemplate(name) {
@@ -51,7 +68,7 @@ function loadTemplate(name) {
 
 function write(file, str, mode) {
     fs.writeFileSync(file, str, { mode: mode || MODE_0666 })
-    console.log(' \x1b[36mcreate\x1b[0m : ' + file)
+        //console.log(' \x1b[36mcreate\x1b[0m : ' + file)
 }
 
 async function createRoutes(dir) {
@@ -67,13 +84,6 @@ async function createRoutes(dir) {
     write(path.join(dir, './routes/test.js'), app.render());
 }
 
-createRoutes("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/");
-
-
-
-
-
+//createRoutes("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/");
 app.use(routes)
-
-
 app.listen(3000);
