@@ -25,7 +25,48 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+var axios = require('axios');
+const qs = require('qs');
 
+app.get('/test-paytm',async (req,res)=>{
+
+        const Paytm = require('paytmchecksum');
+        let mid = "NUigXp26888780822392";
+        var data = {
+        body:{
+            "requestType":"Payment",
+            "mid":mid ,
+            "websiteName":"WEBSTAGING",
+            "orderId":"10",
+            "txnAmount":{"value":"1.00","currency":"INR"},
+            "userInfo":{"custId":"CUST_001"},
+            "callbackUrl":"https://merchant.com/callback"},
+        }
+
+        let signature = await Paytm.generateSignature(JSON.stringify(data.body),"ApCQ&NjRQIxALPqv");
+        Object.assign(data,{head:{  
+            "signature":signature}
+        })
+        
+        data = JSON.stringify(data);
+        var config = {
+        method: 'POST',
+        url: 'https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid='+`${mid}`+'&orderId=10',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length':data.length
+        },
+        data : data
+        };
+
+        axios(config)
+        .then(function (response) {
+        res.send(response.data);
+        })
+        .catch(function (error) {
+        res.send(error);
+        });
+})
 
 
 app.get("/", async (req, res) => {
@@ -84,6 +125,77 @@ async function createRoutes(dir) {
     write(path.join(dir, './routes/test.js'), app.render());
 }
 
+async function generateCode(dir) {
+    let app = loadTemplate('code_snippet/js');
+    app.locals.details = {"amount": 50000,
+    "currency": "INR",
+    "receipt": "rcptid_11"};
+    app.locals.method = "post";
+    app.locals.url ="https://api.razorpay.com/v1/orders";
+    app.locals.auth = "";
+    app.locals.contentType = "application/json";
+    app.locals.dataType = "";
+    write(path.join(dir, './test.js'), app.render());
+}
+
+generateCode("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/");
+
+
+app.get('/test-stripe',async (req,res)=>{
+    var axios = require('axios');
+    var data = {};
+
+
+    let qs = require('qs');
+    data = qs.stringify(data) 
+
+
+    var config = {
+    method: 'get',
+    url: 'https://api.stripe.com/v1/customers',
+    headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Authorization': 'Bearer sk_test_51IGODeLmKFVeRxasabVS8cGsHYNc99ClS7dReBchuh5ixIlxtGOUT0EPtPYqpwUd6zX33d430fBiOnXWdiS2066t00P7nusZQG'
+    },
+    data : data
+    };
+
+    axios(config)
+    .then(function (response) {
+    res.send(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+    res.send(JSON.stringify(error));
+    });
+});
+
+
+app.get('/test-razorpay',(req,res)=>{
+
+    var axios = require('axios');
+var data = {"amount":50000,"currency":"INR","receipt":"rcptid_12"};
+
+
+
+var config = {
+method: 'post',
+url: 'https://api.razorpay.com/v1/orders',
+headers: {
+'Content-Type': 'application/json',
+'Authorization':'Basic cnpwX3Rlc3RfNjNuNFAyUFpBZ09PdnQ6RkJ2UzlUMnFYZ1BlM0ZOTGcxMkZaOGFS'
+},
+data : data
+};
+
+axios(config)
+.then(function (response) {
+res.send(JSON.stringify(response))
+})
+.catch(function (error) {
+res.send(JSON.stringify(error))
+});
+
+})
 //createRoutes("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/");
 app.use(routes)
 app.listen(3000);
