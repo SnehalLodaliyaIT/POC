@@ -12,5 +12,9 @@ module.exports = {
         PATH_PARAMETER:2,
         QUERY_PARAMETER:1,
         
+    },
+    CONTENT_TYPE:{
+        'application/json':1,
+        'x-www-form-urlencoded':2
     }
 }

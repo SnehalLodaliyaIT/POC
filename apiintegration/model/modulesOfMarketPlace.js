@@ -3,8 +3,6 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 var idvalidator = require('mongoose-id-validator');
 
 
-const uniqueValidator = require('mongoose-unique-validator');
-
 
 const myCustomLabels = {
     totalDocs: 'itemCount',
@@ -25,15 +23,12 @@ mongoosePaginate.paginate.options = {
 const Schema = mongoose.Schema;
 const schema = new Schema(
     {
-	nameOfModule: {
-		type: String,
-		unique: true,
-		uniqueCaseInsensitive: true
-	},
+	nameOfModule: String,
 	marketPlace: {
 		type: Schema.Types.ObjectId,
 		ref: "marketPlace"
 	},
+    contentType: Number,
 	isDeleted: Boolean,
 	isActive: Boolean
 },
@@ -53,9 +48,6 @@ schema.method("toJSON", function () {
 });
 schema.plugin(mongoosePaginate);
 schema.plugin(idvalidator);
-
-
-schema.plugin(uniqueValidator);
 
 
 
