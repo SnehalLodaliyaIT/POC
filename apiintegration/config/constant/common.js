@@ -8,9 +8,13 @@ module.exports = {
         PHP: 6
     },
     PARAMETER_TYPE:{
-        REQUEST_PARAMETER:1,
+        REQUEST_PARAMETER:3,
         PATH_PARAMETER:2,
-        QUERY_PARAMETER:3,
+        QUERY_PARAMETER:1,
         
+    },
+    CONTENT_TYPE:{
+        'application/json':1,
+        'x-www-form-urlencoded':2
     }
 }
