@@ -37,7 +37,7 @@ app.get('/test-paytm', async (req, res) => {
             "requestType": "Payment",
             "mid": mid,
             "websiteName": "WEBSTAGING",
-            "orderId": "10",
+            "orderId": "20",
             "txnAmount": { "value": "1.00", "currency": "INR" },
             "userInfo": { "custId": "CUST_001" },
             "callbackUrl": "https://merchant.com/callback"
@@ -54,7 +54,7 @@ app.get('/test-paytm', async (req, res) => {
     data = JSON.stringify(data);
     var config = {
         method: 'POST',
-        url: 'https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid=' + `${mid}` + '&orderId=10',
+        url: 'https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid=' + `${mid}` + '&orderId=20',
         headers: {
             'Content-Type': 'application/json',
             'Content-Length': data.length

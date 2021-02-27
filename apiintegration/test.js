@@ -1,25 +1,28 @@
 var axios = require('axios');
 var data = {};
 
-    
 
-            var config = {
-            method: 'get',
-                url: 'https://gmail.googleapis.com/gmail/v1/users/kajalmorker1@gmail.com/messages',
-                    headers: {
-                    
-                        'Content-Type': '',
-                            
-                                
-                                    'Authorization': 'Bearer ya29.A0AfH6SMB4Fkl1pqFHEoOOuvoI8QxcdumvsADr5lTKZPeI6u8rmK10S5Nwch-Erugwrwdl2SxY22zLVS5J63lQ1iOMsvxy0O_PNRYcSIuqpUSwKU4TXvfwoht0mXkCXJIQaumT6qws7SUoqigzA4JEn6LQxYZF'
-                                        },
-                                        data : data
-                                        };
+let qs = require('qs');
+data = qs.stringify(data)
 
-                                        axios(config)
-                                        .then(function (response) {
-                                        res.send(JSON.stringify(response))
-                                        })
-                                        .catch(function (error) {
-                                        res.send(JSON.stringify(error))
-                                        });
+
+var config = {
+    method: 'get',
+    url: 'https://api.stripe.com/v1/customers',
+    headers: {
+
+        'Content-Type': 'application/x-www-form-urlencoded',
+
+
+        'Authorization': 'Bearer sk_test_51IGODeLmKFVeRxasabVS8cGsHYNc99ClS7dReBchuh5ixIlxtGOUT0EPtPYqpwUd6zX33d430fBiOnXWdiS2066t00P7nusZQG'
+    },
+    data: data
+};
+
+axios(config)
+    .then(function (response) {
+        res.send(JSON.stringify(response))
+    })
+    .catch(function (error) {
+        res.send(JSON.stringify(error))
+    });

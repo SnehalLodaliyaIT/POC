@@ -35,10 +35,10 @@ async function generateCode(req,res) {
     let app = await loadTemplate('code_snippet/js');
     app.locals.details = {};
     app.locals.method = "get";
-    app.locals.url ="https://gmail.googleapis.com/gmail/v1/users/kajalmorker1@gmail.com/messages";
-    app.locals.auth = "Bearer ya29.A0AfH6SMB4Fkl1pqFHEoOOuvoI8QxcdumvsADr5lTKZPeI6u8rmK10S5Nwch-Erugwrwdl2SxY22zLVS5J63lQ1iOMsvxy0O_PNRYcSIuqpUSwKU4TXvfwoht0mXkCXJIQaumT6qws7SUoqigzA4JEn6LQxYZF";
-    app.locals.contentType = "";
-    app.locals.dataType = "";
+    app.locals.url ="https://api.stripe.com/v1/customers";
+    app.locals.auth = "Bearer sk_test_51IGODeLmKFVeRxasabVS8cGsHYNc99ClS7dReBchuh5ixIlxtGOUT0EPtPYqpwUd6zX33d430fBiOnXWdiS2066t00P7nusZQG";
+    app.locals.contentType = "application/x-www-form-urlencoded";
+    app.locals.dataType = "queryParams";
     write(path.join(params.dir, './test.js'), app.render());
     res.send("success")
 }
