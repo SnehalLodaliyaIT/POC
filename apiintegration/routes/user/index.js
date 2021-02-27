@@ -1,10 +1,10 @@
 const express =  require("express")
 const router =  express.Router()
 
-const importCodeRoutes =  require("./importCodeRoutes")
+const generateCodeRoutes =  require("./generateCodeRoutes")
 
 
-router.use("/importCode",importCodeRoutes)
+router.use("/generateCode",generateCodeRoutes)
 
 
 module.exports = router

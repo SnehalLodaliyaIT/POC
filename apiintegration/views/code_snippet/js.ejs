@@ -1,25 +1,28 @@
 var axios = require('axios');
 var data = <%- JSON.stringify(details) %>;
 
-<% if(dataType === "queryParams") { %>
-let qs = require('qs');
-data = qs.stringify(data) 
-<% } %>
+    <% if(dataType==="queryParams" ) { %>
+        let qs = require('qs');
+        data = qs.stringify(data)
+        <% } %>
 
-var config = {
-method: <%= method %>,
-url: <%= url %>,
-headers: {
-'Content-Type': <%= contentType %>,
-'Authorization': <%= auth %>
-},
-data : data
-};
+            var config = {
+            method: <%= method %>,
+                url: <%= url %>,
+                    headers: {
+                    <% if(contentType != null) { %>
+                        'Content-Type': <%= contentType %>,
+                            <% } %>
+                                
+                                    'Authorization': <%= auth %>
+                                        },
+                                        data : data
+                                        };
 
-axios(config)
-.then(function (response) {
-res.send(JSON.stringify(response))
-})
-.catch(function (error) {
-res.send(JSON.stringify(error))
-});
+                                        axios(config)
+                                        .then(function (response) {
+                                        res.send(JSON.stringify(response))
+                                        })
+                                        .catch(function (error) {
+                                        res.send(JSON.stringify(error))
+                                        });

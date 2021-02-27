@@ -28,55 +28,58 @@ app.use(express.static(path.join(__dirname, 'public')));
 var axios = require('axios');
 const qs = require('qs');
 
-app.get('/test-paytm',async (req,res)=>{
+app.get('/test-paytm', async (req, res) => {
 
-        const Paytm = require('paytmchecksum');
-        let mid = "NUigXp26888780822392";
-        var data = {
-        body:{
-            "requestType":"Payment",
-            "mid":mid ,
-            "websiteName":"WEBSTAGING",
-            "orderId":"10",
-            "txnAmount":{"value":"1.00","currency":"INR"},
-            "userInfo":{"custId":"CUST_001"},
-            "callbackUrl":"https://merchant.com/callback"},
+    const Paytm = require('paytmchecksum');
+    let mid = "NUigXp26888780822392";
+    var data = {
+        body: {
+            "requestType": "Payment",
+            "mid": mid,
+            "websiteName": "WEBSTAGING",
+            "orderId": "10",
+            "txnAmount": { "value": "1.00", "currency": "INR" },
+            "userInfo": { "custId": "CUST_001" },
+            "callbackUrl": "https://merchant.com/callback"
+        },
+    }
+
+    let signature = await Paytm.generateSignature(JSON.stringify(data.body), "ApCQ&NjRQIxALPqv");
+    Object.assign(data, {
+        head: {
+            "signature": signature
         }
+    })
 
-        let signature = await Paytm.generateSignature(JSON.stringify(data.body),"ApCQ&NjRQIxALPqv");
-        Object.assign(data,{head:{  
-            "signature":signature}
-        })
-        
-        data = JSON.stringify(data);
-        var config = {
+    data = JSON.stringify(data);
+    var config = {
         method: 'POST',
-        url: 'https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid='+`${mid}`+'&orderId=10',
+        url: 'https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid=' + `${mid}` + '&orderId=10',
         headers: {
             'Content-Type': 'application/json',
-            'Content-Length':data.length
+            'Content-Length': data.length
         },
-        data : data
-        };
+        data: data
+    };
 
-        axios(config)
+    axios(config)
         .then(function (response) {
-        res.send(response.data);
+            res.send(response.data);
         })
         .catch(function (error) {
-        res.send(error);
+            res.send(error);
         });
 })
 
 
 app.get("/", async (req, res) => {
     const appName = "DemoApp";
-    let data = await marketPlace.findOne({marketPlaceName:"RazorPay"});
-    let authentication = _.map(data.authenticationTypeId,a=>{
+    let data = await marketPlace.findOne({ marketPlaceName: "RazorPay" });
+    let authentication = _.map(data.authenticationTypeId, a => {
         return a;
     });
-    authentication = await master.find({_id: authentication });
-    authentication = _.map(authentication,a=>{
+    authentication = await master.find({ _id: authentication });
+    authentication = _.map(authentication, a => {
         return a.name;
     });
     console.log(authentication);
@@ -107,10 +110,6 @@ function loadTemplate(name) {
     }
 }
 
-function write(file, str, mode) {
-    fs.writeFileSync(file, str, { mode: mode || MODE_0666 })
-        //console.log(' \x1b[36mcreate\x1b[0m : ' + file)
-}
 
 async function createRoutes(dir) {
     let app = loadTemplate('routeTemplate.js');
@@ -125,75 +124,83 @@ async function createRoutes(dir) {
     write(path.join(dir, './routes/test.js'), app.render());
 }
 
-async function generateCode(dir) {
-    let app = loadTemplate('code_snippet/js');
-    app.locals.details = {"amount": 50000,
-    "currency": "INR",
-    "receipt": "rcptid_11"};
-    app.locals.method = "post";
-    app.locals.url ="https://api.razorpay.com/v1/orders";
-    app.locals.auth = "";
-    app.locals.contentType = "application/json";
-    app.locals.dataType = "";
-    write(path.join(dir, './test.js'), app.render());
-}
-
-generateCode("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/");
 
 
-app.get('/test-stripe',async (req,res)=>{
+//generateCode("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/");
+//generateCode("/home/snehallodaliya/Downloads/POC/POC/apiintegration");
+
+
+app.get('/test-stripe', async (req, res) => {
     var axios = require('axios');
     var data = {};
 
 
     let qs = require('qs');
-    data = qs.stringify(data) 
+    data = qs.stringify(data)
 
 
     var config = {
-    method: 'get',
-    url: 'https://api.stripe.com/v1/customers',
-    headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Authorization': 'Bearer sk_test_51IGODeLmKFVeRxasabVS8cGsHYNc99ClS7dReBchuh5ixIlxtGOUT0EPtPYqpwUd6zX33d430fBiOnXWdiS2066t00P7nusZQG'
-    },
-    data : data
+        method: 'get',
+        url: 'https://api.stripe.com/v1/customers',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Bearer sk_test_51IGODeLmKFVeRxasabVS8cGsHYNc99ClS7dReBchuh5ixIlxtGOUT0EPtPYqpwUd6zX33d430fBiOnXWdiS2066t00P7nusZQG'
+        },
+        data: data
     };
 
     axios(config)
-    .then(function (response) {
-    res.send(JSON.stringify(response.data));
-    })
-    .catch(function (error) {
-    res.send(JSON.stringify(error));
-    });
+        .then(function (response) {
+            res.send(JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+            res.send(JSON.stringify(error));
+        });
 });
 
 
-app.get('/test-razorpay',(req,res)=>{
+app.get('/test-razorpay', (req, res) => {
 
     var axios = require('axios');
-var data = {"amount":50000,"currency":"INR","receipt":"rcptid_12"};
+    var data = { "amount": 50000, "currency": "INR", "receipt": "rcptid_12" };
 
 
 
-var config = {
-method: 'post',
-url: 'https://api.razorpay.com/v1/orders',
-headers: {
-'Content-Type': 'application/json',
-'Authorization':'Basic cnpwX3Rlc3RfNjNuNFAyUFpBZ09PdnQ6RkJ2UzlUMnFYZ1BlM0ZOTGcxMkZaOGFS'
-},
-data : data
-};
+    var config = {
+        method: 'post',
+        url: 'https://api.razorpay.com/v1/orders',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic cnpwX3Rlc3RfNjNuNFAyUFpBZ09PdnQ6RkJ2UzlUMnFYZ1BlM0ZOTGcxMkZaOGFS'
+        },
+        data: data
+    };
 
-axios(config)
-.then(function (response) {
-res.send(JSON.stringify(response))
+    axios(config)
+        .then(function (response) {
+            res.send(JSON.stringify(response))
+        })
+        .catch(function (error) {
+            res.send(JSON.stringify(error))
+        });
+
 })
-.catch(function (error) {
-res.send(JSON.stringify(error))
-});
+
+app.get('/test-gmail', async (req, res) => {
+
+    var axios = require('axios');
+    var base64 = require('js-base64')
+
+    let request = {
+        url: 'https://gmail.googleapis.com/gmail/v1/users/kajalmorker1@gmail.com/messages',
+        headers: {
+            "Authorization": 'Bearer ya29.A0AfH6SMCU2P6lzE5fcSK1OEi94AUzD6667dt_Po-BMrBZ6cX2uTm9GDAScKPAteJOZ-mYZ0mEgUsgUQDdbPy23eqiSrRd2KNklIWKMqwoWQgiEvoH_WklYPkqcf2lM0RPv6bknE3e3P1JjqQWq_e77ki41LYs'
+        }
+    }
+
+    let response = await axios.get(request.url, { headers: request.headers });
+
+
 
 })
 //createRoutes("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/");
