@@ -30,35 +30,52 @@ function write(file, str, mode) {
         //console.log(' \x1b[36mcreate\x1b[0m : ' + file)
 }
 
-async function generateCode(req,res) {
+let detailsForCode={
+    "data":{},
+    "method":"get",
+    "url":"https://api.stripe.com/v1/customers",
+    "auth":"Bearer sk_test_51IGODeLmKFVeRxasabVS8cGsHYNc99ClS7dReBchuh5ixIlxtGOUT0EPtPYqpwUd6zX33d430fBiOnXWdiS2066t00P7nusZQG",
+    "contentType":"application/x-www-form-urlencoded",
+    "dataType":"queryParams"
+}
+
+async function generateCode(req, res) {
     const params={...req.body}
     let app = await loadTemplate('code_snippet/js');
-    app.locals.details = {};
-    app.locals.method = "get";
-    app.locals.url ="https://api.stripe.com/v1/customers";
-    app.locals.auth = "Bearer sk_test_51IGODeLmKFVeRxasabVS8cGsHYNc99ClS7dReBchuh5ixIlxtGOUT0EPtPYqpwUd6zX33d430fBiOnXWdiS2066t00P7nusZQG";
-    app.locals.contentType = "application/x-www-form-urlencoded";
-    app.locals.dataType = "queryParams";
+    app.locals.details = detailsForCode.data;
+    app.locals.method = detailsForCode.method;
+    app.locals.url =detailsForCode.url;
+    app.locals.auth = detailsForCode.auth;
+    app.locals.contentType = detailsForCode.contentType;
+    app.locals.dataType = detailsForCode.dataType;
     write(path.join(params.dir, './test.js'), app.render());
     res.send("success")
+}
+
+let detailsForGoogleCode={
+    "data":{},
+    "method":"get",
+    "url":"https://gmail.googleapis.com/gmail/v1/users/kajalmorker1@gmail.com/messages",
+    "auth":"",
+    "contentType":"",
+    "dataType":""
 }
 
 async function generateGmailCode(req,res) {
     const params={...req.body}
     let app = await loadTemplate('code_snippet/gmailjs');
-    app.locals.details = {};
-    app.locals.method = "get";
-    app.locals.url ="https://gmail.googleapis.com/gmail/v1/users/kajalmorker1@gmail.com/messages";
-    app.locals.auth = "Bearer ya29.A0AfH6SMCU2P6lzE5fcSK1OEi94AUzD6667dt_Po-BMrBZ6cX2uTm9GDAScKPAteJOZ-mYZ0mEgUsgUQDdbPy23eqiSrRd2KNklIWKMqwoWQgiEvoH_WklYPkqcf2lM0RPv6bknE3e3P1JjqQWq_e77ki41LYs";
-    app.locals.contentType = "";
-    app.locals.dataType = "";
+    app.locals.details =detailsForGoogleCode.data ;
+    app.locals.method = detailsForGoogleCode.method;
+    app.locals.url =detailsForGoogleCode.url;
+    app.locals.auth =detailsForGoogleCode.auth;
+    app.locals.contentType = detailsForGoogleCode.contentType;
+    app.locals.dataType = detailsForGoogleCode.dataType;
     write(path.join(params.dir, './gmailtest.js'), app.render());
     res.send("success")
 }
 
 
 module.exports={
-    
     generateCode  ,
     generateGmailCode       
 }
