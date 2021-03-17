@@ -6,7 +6,7 @@ var config = {
     url: 'https://slack.com/api/conversations.create',
     headers: {
         
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json;charset=utf-8',
         
         
             'Authorization': 'Bearer xoxp-1761069917364-1740130342359-1852977026151-b5d3c5338b567ea1f1c768044f64e4a0',

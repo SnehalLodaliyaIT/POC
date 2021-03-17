@@ -12,7 +12,9 @@ var config = {
             'Authorization': <%= auth %>,
         <% } %> 
     },
-    data : data
+    <% if(method !== 'get') { %>
+        data:data
+    <% } %>
 }
 
 axios(config)

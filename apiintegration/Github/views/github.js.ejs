@@ -1,20 +1,26 @@
 const axios = require('axios');
-let data = <%- JSON.stringify(details) %>;
+let data = <%- JSON.stringify(details); %>
 
 var config = {
     method: <%= method %>,
     url: <%= url %>,
     headers: {
-        <% if(contentType != null) { %>
+        <% if(contentType!= null && contentType!= "") { %>
             'Content-Type': <%= contentType %>,
         <% } %>
-        <% if(auth != null) { %>
+        <% if(auth != null && auth != "") { %>
             'Authorization': <%= auth %>,
         <% } %> 
+         <% if(Accept != null && Accept != "") { %>
+            'Accept': <%= Accept %>
+        <% } %> 
+
     },
     <% if(method !== 'get') { %>
         data:data
     <% } %>
+    
+    
 }
 
 axios(config)
