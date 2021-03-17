@@ -50,12 +50,10 @@ function loadTemplate(name) {
 
 app.get('/test', async (req, res) => {
     const axios = require('axios');
-    let data =
-        {}
-
+    let data = {}
 
     var config = {
-        method: 'GET',
+        method: 'get',
         url: 'https://api.github.com/user?access_token=8b1969e565dbb5aabd2d8008673dc3f1db21198c',
         headers: {
 
@@ -64,8 +62,9 @@ app.get('/test', async (req, res) => {
             'Accept': 'application/vnd.github.v3+json'
 
 
-        },
-        data: data
+        }
+
+
 
     }
 
