@@ -1,0 +1,10 @@
+{
+    "appName" : "DemoApp",
+    "authentication" : {
+        
+            "SecretKey":"Your Key"  , 
+        
+            "PublishKey":"Your Key" 
+        
+    }
+}

@@ -1,0 +1,72 @@
+{
+  "marketPlaceName": "RazorPay",
+  "marketPlaceId": "602cac3d6fdff925eed6b863",
+  "modules": [
+    {
+      "moduleName": "Customer",
+      "moduleId": "602e2701872375245dd757f0",
+      "apis": [
+        {
+          "apiId": "602e27b5872375245dd757f1",
+          "apiTitle": " add customer",
+          "parameters": [
+            {
+              "1": []
+            }
+          ],
+          "languageWiseCode": [
+            {
+              "languageCode": "NODE",
+              "Node": "let customer=instance.customers.create({\n    \"name\":\"shubham Kumar\",\n    \"email\":\"shubham.kumar@example.com\",\n    \"contact\":\"9123456780\",\n    \"fail_existing\":\"1\",\n    \"gstin\":\"12ABCDE2356F7GH\",\n    \"notes\":{\n      \"notes_key_1\":\"Tea, Earl Grey, Hot\",\n      \"notes_key_2\":\"Tea, Earl Grey… decaf.\"\n    }\n  }, (error, response) => {\n    if (error) {    // handle error \n        console.log(error);\n    }\n    else {    // handle success \n        console.log(response);\n    }\n})"
+            }
+          ]
+        },
+        {
+          "apiId": "602e5360be7a683f401f19b4",
+          "apiTitle": " edit customer",
+          "parameters": [
+            {
+              "1": []
+            }
+          ],
+          "languageWiseCode": [
+            {
+              "languageCode": "NODE",
+              "Node": "let customer=instance.customers.edit(\"cust_GcyJxYMy16wTXR\",{\n    \"name\":\"shubham jasani\",\n    \"email\":\"shubham.kumar@example.com\",\n    \"contact\":\"9123456780\"\n    \n  }, (error, response) => {\n    if (error) {    // handle error \n        console.log(error);\n    }\n    else {    // handle success \n        console.log(response);\n    }\n})\n"
+            }
+          ]
+        },
+        {
+          "apiId": "602e57266b700f64cdfc99ed",
+          "apiTitle": " fetch all customer",
+          "parameters": [
+            {
+              "1": []
+            }
+          ],
+          "languageWiseCode": [
+            {
+              "languageCode": "NODE",
+              "Node": "let customer=instance.customers.fetchTokens(\"cust_GcyJxYMy16wTXR\", (error, response) => {\n    if (error) {    // handle error \n        console.log(error);\n    }\n    else {    // handle success \n        console.log(response);\n    }\n})\n"
+            }
+          ]
+        },
+        {
+          "apiId": "602e570f6b700f64cdfc99ec",
+          "apiTitle": " fetch  customer by id",
+          "parameters": [
+            {
+              "1": []
+            }
+          ],
+          "languageWiseCode": [
+            {
+              "languageCode": "NODE",
+              "Node": "let customer=instance.customers.fetch(\"cust_GcyJxYMy16wTXR\", (error, response) => {\n    if (error) {    // handle error \n        console.log(error);\n    }\n    else {    // handle success \n        console.log(response);\n    }\n})\n"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

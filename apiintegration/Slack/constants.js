@@ -1,0 +1,5 @@
+module.exports = {
+    client_id: "1761069917364.1754906003794",
+    client_request: "498fa1dc1ead4d815dcdb44c838a2b66",
+    token: "xoxp-1761069917364-1740130342359-1852977026151-b5d3c5338b567ea1f1c768044f64e4a0"
+}

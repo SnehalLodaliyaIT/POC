@@ -1,0 +1,27 @@
+var axios = require('axios');
+var FormData = require('form-data');
+var data = new FormData();
+<% if(details) { %>
+
+    <% for(var i=0; i < Object.keys(details).length; i++) { %>
+        data.append(<%= Object.keys(details)[i] %>,<%= details[Object.keys(details)[i]] %>);
+                <% } %>
+
+                    <% } %>
+                        var config = {
+                        method: <%= method %>,
+                            url: <%= url %>,
+                                headers: {
+                                'Authorization': <%= auth %>,
+                                    ...data.getHeaders()
+                                    },
+                                    data : data
+                                    };
+
+                                    axios(config)
+                                    .then(function (response) {
+                                    res.send(JSON.stringify(response.data))
+                                    })
+                                    .catch(function (error) {
+                                    res.send(JSON.stringify(error))
+                                    });

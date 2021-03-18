@@ -1,0 +1,906 @@
+{
+  "info": {
+    "name": "apiintegration",
+    "_postman_id": "eff7d246-7917-4f32-996c-98eb28ae6638",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Admin",
+      "description": "Admin Desc",
+      "item": [
+        {
+          "name": "master",
+          "description": "master Model",
+          "item": [
+            {
+              "name": "addmaster",
+              "request": {
+                "url": "http://localhost:3000/admin/master/create",
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "insertBulkmaster",
+              "request": {
+                "url": "http://localhost:3000/admin/master/addBulk",
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "findAllmaster",
+              "request": {
+                "url": "http://localhost:3000/admin/master/list",
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "getmaster",
+              "request": {
+                "url": "http://localhost:3000/admin/master/{{id}}",
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "updatemaster",
+              "request": {
+                "url": "http://localhost:3000/admin/master/update/{{id}}",
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "updateBulkmaster",
+              "request": {
+                "url": "http://localhost:3000/admin/master/updateBulk",
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "deletemaster",
+              "request": {
+                "url": "http://localhost:3000/admin/master/delete/{{id}}",
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            }
+          ]
+        },
+        {
+          "name": "user",
+          "description": "user Model",
+          "item": [
+            {
+              "name": "adduser",
+              "request": {
+                "url": "http://localhost:3000/admin/user/create",
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "insertBulkuser",
+              "request": {
+                "url": "http://localhost:3000/admin/user/addBulk",
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "findAlluser",
+              "request": {
+                "url": "http://localhost:3000/admin/user/list",
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "getuser",
+              "request": {
+                "url": "http://localhost:3000/admin/user/{{id}}",
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "updateuser",
+              "request": {
+                "url": "http://localhost:3000/admin/user/update/{{id}}",
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "updateBulkuser",
+              "request": {
+                "url": "http://localhost:3000/admin/user/updateBulk",
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "deleteuser",
+              "request": {
+                "url": "http://localhost:3000/admin/user/delete/{{id}}",
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            }
+          ]
+        },
+        {
+          "name": "marketPlace",
+          "description": "marketPlace Model",
+          "item": [
+            {
+              "name": "addmarketPlace",
+              "request": {
+                "url": "http://localhost:3000/admin/marketplace/create",
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "insertBulkmarketPlace",
+              "request": {
+                "url": "http://localhost:3000/admin/marketplace/addBulk",
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "findAllmarketPlace",
+              "request": {
+                "url": "http://localhost:3000/admin/marketplace/list",
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "getmarketPlace",
+              "request": {
+                "url": "http://localhost:3000/admin/marketplace/{{id}}",
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "updatemarketPlace",
+              "request": {
+                "url": "http://localhost:3000/admin/marketplace/update/{{id}}",
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "updateBulkmarketPlace",
+              "request": {
+                "url": "http://localhost:3000/admin/marketplace/updateBulk",
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "deletemarketPlace",
+              "request": {
+                "url": "http://localhost:3000/admin/marketplace/delete/{{id}}",
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            }
+          ]
+        },
+        {
+          "name": "modulesOfMarketPlace",
+          "description": "modulesOfMarketPlace Model",
+          "item": [
+            {
+              "name": "addmodulesOfMarketPlace",
+              "request": {
+                "url": "http://localhost:3000/admin/modulesofmarketplace/create",
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "insertBulkmodulesOfMarketPlace",
+              "request": {
+                "url": "http://localhost:3000/admin/modulesofmarketplace/addBulk",
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "findAllmodulesOfMarketPlace",
+              "request": {
+                "url": "http://localhost:3000/admin/modulesofmarketplace/list",
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "getmodulesOfMarketPlace",
+              "request": {
+                "url": "http://localhost:3000/admin/modulesofmarketplace/{{id}}",
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "updatemodulesOfMarketPlace",
+              "request": {
+                "url": "http://localhost:3000/admin/modulesofmarketplace/update/{{id}}",
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "updateBulkmodulesOfMarketPlace",
+              "request": {
+                "url": "http://localhost:3000/admin/modulesofmarketplace/updateBulk",
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "deletemodulesOfMarketPlace",
+              "request": {
+                "url": "http://localhost:3000/admin/modulesofmarketplace/delete/{{id}}",
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            }
+          ]
+        },
+        {
+          "name": "marketPlacesOfUser",
+          "description": "marketPlacesOfUser Model",
+          "item": [
+            {
+              "name": "addmarketPlacesOfUser",
+              "request": {
+                "url": "http://localhost:3000/admin/marketplacesofuser/create",
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "insertBulkmarketPlacesOfUser",
+              "request": {
+                "url": "http://localhost:3000/admin/marketplacesofuser/addBulk",
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "findAllmarketPlacesOfUser",
+              "request": {
+                "url": "http://localhost:3000/admin/marketplacesofuser/list",
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "getmarketPlacesOfUser",
+              "request": {
+                "url": "http://localhost:3000/admin/marketplacesofuser/{{id}}",
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "updatemarketPlacesOfUser",
+              "request": {
+                "url": "http://localhost:3000/admin/marketplacesofuser/update/{{id}}",
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "updateBulkmarketPlacesOfUser",
+              "request": {
+                "url": "http://localhost:3000/admin/marketplacesofuser/updateBulk",
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "deletemarketPlacesOfUser",
+              "request": {
+                "url": "http://localhost:3000/admin/marketplacesofuser/delete/{{id}}",
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            }
+          ]
+        },
+        {
+          "name": "apis",
+          "description": "apis Model",
+          "item": [
+            {
+              "name": "addapis",
+              "request": {
+                "url": "http://localhost:3000/admin/apis/create",
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "insertBulkapis",
+              "request": {
+                "url": "http://localhost:3000/admin/apis/addBulk",
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "findAllapis",
+              "request": {
+                "url": "http://localhost:3000/admin/apis/list",
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "getapis",
+              "request": {
+                "url": "http://localhost:3000/admin/apis/{{id}}",
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "updateapis",
+              "request": {
+                "url": "http://localhost:3000/admin/apis/update/{{id}}",
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "updateBulkapis",
+              "request": {
+                "url": "http://localhost:3000/admin/apis/updateBulk",
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            },
+            {
+              "name": "deleteapis",
+              "request": {
+                "url": "http://localhost:3000/admin/apis/delete/{{id}}",
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "description": ""
+              },
+              "_postman_isSubFolder": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": null,
+      "description": null,
+      "item": []
+    },
+    {
+      "name": null,
+      "description": null,
+      "item": []
+    },
+    {
+      "name": null,
+      "description": null,
+      "item": []
+    }
+  ]
+}
