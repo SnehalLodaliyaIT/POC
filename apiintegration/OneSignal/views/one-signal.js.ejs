@@ -1,0 +1,26 @@
+const axios = require('axios');
+let data = <%- JSON.stringify(details) %>;
+
+var config = {
+    method: <%= method %>,
+    url: <%= url %>,
+    headers: {
+        <% if(contentType != null) { %>
+            'Content-Type': <%= contentType %>,
+        <% } %>
+        <% if(auth != null) { %>
+            'Authorization': <%= auth %>,
+        <% } %> 
+    },
+    <% if(method !== 'get') { %>
+        data:data
+    <% } %>
+}
+
+axios(config)
+.then(function (response) {
+    res.send(JSON.stringify(response.data))
+})
+.catch(function (error) {
+    res.send(JSON.stringify(error))
+});
