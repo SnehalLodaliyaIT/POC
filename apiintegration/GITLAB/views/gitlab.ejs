@@ -1,0 +1,29 @@
+var axios = require('axios');
+<% if(details){ %>
+    var data = <%- JSON.stringify(details) %>;
+        <% } %>
+
+            var config = {
+            method: <%= method %>,
+                url: <%= url %>,
+                    headers: {
+                    <% if(method !=='get' ) { %>
+                        'Content-Type': <%= contentType %>,
+                            <% } %>
+
+                                <% if(auth.length) { %>
+                                    'Authorization': <%= auth %>
+                                        <% } %>
+                                            <% if(details) { %>
+                                               , data : data
+                                                <% } %>
+                                            }
+                                                    };
+
+                                                    axios(config)
+                                                    .then(function (response) {
+                                                    res.send(JSON.stringify(response.data))
+                                                    })
+                                                    .catch(function (error) {
+                                                    res.send(JSON.stringify(error))
+                                                    });

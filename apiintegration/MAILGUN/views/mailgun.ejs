@@ -1,0 +1,33 @@
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+var axios = require('axios');
+
+<% if(details) { %>
+        var FormData = require('form-data');
+        var data = new FormData();
+        <% var jsondata=JSON.stringify(details)
+        for(var i=0; i < Object.keys(details).length; i++) { %>
+            data.append(<%= Object.keys(details)[i] %>,<%= details[Object.keys(details)[i]] %>);
+            <% } %>
+               
+<% } %>
+                    var config = {
+                    method: <%= method %>,
+                        url: <%= url %>,
+                            headers: {
+                            'Authorization': <%= auth %>
+                            <% if(details) { %>
+                                , ...data.getHeaders()
+                                <% } %>
+                                },
+                                <% if(details) { %>
+                                    data : data
+                                    <% } %>
+                                        };
+
+                                        axios(config)
+                                        .then(function (response) {
+                                        res.send(JSON.stringify(response.data))
+                                        })
+                                        .catch(function (error) {
+                                        res.send(JSON.stringify(error))
+                                        });

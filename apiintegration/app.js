@@ -131,78 +131,118 @@ async function createRoutes(dir) {
 
 
 app.get('/test-stripe', async (req, res) => {
+    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
     var axios = require('axios');
-    var data = {};
-
-
-    let qs = require('qs');
-    data = qs.stringify(data)
-
-
-    var config = {
-        method: 'get',
-        url: 'https://api.stripe.com/v1/customers',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Bearer sk_test_51IGODeLmKFVeRxasabVS8cGsHYNc99ClS7dReBchuh5ixIlxtGOUT0EPtPYqpwUd6zX33d430fBiOnXWdiS2066t00P7nusZQG'
-        },
-        data: data
-    };
-
-    axios(config)
-        .then(function (response) {
-            res.send(JSON.stringify(response.data));
-        })
-        .catch(function (error) {
-            res.send(JSON.stringify(error));
-        });
-});
-
-
-app.get('/test-razorpay', (req, res) => {
-
-    var axios = require('axios');
-    var data = { "amount": 50000, "currency": "INR", "receipt": "rcptid_12" };
-
-
+    var FormData = require('form-data');
+    var data = new FormData();
+    data.append('from', 'postmaster@sandbox4dc45d2bc5d24fcd8180c43344347a2f.mailgun.org');
+    data.append('to', 'snehallodaliya7621@gmail.com');
+    data.append('subject', 'Tracking test');
+    data.append('text', 'Hello World');
+    data.append('o:tag', 'tracking_test');
+    data.append('o:tracking', 'yes');
 
     var config = {
         method: 'post',
-        url: 'https://api.razorpay.com/v1/orders',
+        url: 'https://api.mailgun.net/v3/sandbox4dc45d2bc5d24fcd8180c43344347a2f.mailgun.org/messages',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Basic cnpwX3Rlc3RfNjNuNFAyUFpBZ09PdnQ6RkJ2UzlUMnFYZ1BlM0ZOTGcxMkZaOGFS'
+            'Authorization': 'Basic YXBpOjk2ZWQyNDI2ODFhZGVkMWY1MDE4ZGIyMTlkZjNjN2JlLTczZTU3ZmVmLTU3YmVhYWM3',
+            ...data.getHeaders()
         },
         data: data
     };
 
     axios(config)
         .then(function (response) {
-            res.send(JSON.stringify(response))
+            console.log(JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+
+});
+
+app.get('/test-mailgun', async (req, res) => {
+    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+    var axios = require('axios');
+    var data = {};
+
+    var config = {
+        method: 'get',
+        url: 'https://api.mailgun.net/v3/domains',
+        headers: {
+            'Authorization': 'Basic YXBpOjk2ZWQyNDI2ODFhZGVkMWY1MDE4ZGIyMTlkZjNjN2JlLTczZTU3ZmVmLTU3YmVhYWM3'
+        },
+
+    };
+
+    axios(config)
+        .then(function (response) {
+            res.send(JSON.stringify(response.data))
         })
         .catch(function (error) {
             res.send(JSON.stringify(error))
         });
 
-})
 
-app.get('/test-gmail', async (req, res) => {
+});
 
+app.get('/test-razorpay', async (req, res) => {
     var axios = require('axios');
-    var base64 = require('js-base64')
+    var data = {};
 
-    let request = {
-        url: 'https://gmail.googleapis.com/gmail/v1/users/kajalmorker1@gmail.com/messages',
+    var config = {
+        method: 'post',
+        url: 'https://api.razorpay.com/v1/customers',
         headers: {
-            "Authorization": 'Bearer ya29.A0AfH6SMCU2P6lzE5fcSK1OEi94AUzD6667dt_Po-BMrBZ6cX2uTm9GDAScKPAteJOZ-mYZ0mEgUsgUQDdbPy23eqiSrRd2KNklIWKMqwoWQgiEvoH_WklYPkqcf2lM0RPv6bknE3e3P1JjqQWq_e77ki41LYs'
-        }
-    }
+            'Authorization': 'Basic cnpwX3Rlc3RfZndaS3hBZHI0ZFQ3dkc6bVlyUmhLNVhEbVZ0OGNWaVVIc2l0Mnly'
+        },
+        data: data
+    };
 
-    let response = await axios.get(request.url, { headers: request.headers });
+    axios(config)
+        .then(function (response) {
+            res.send(JSON.stringify(response.data))
+        })
+        .catch(function (error) {
+            res.send(JSON.stringify(error))
+        });
+});
+
+app.get('/test-twillo', async (req, res) => {
+    var axios = require('axios');
+    var FormData = require('form-data');
+    var data = new FormData();
 
 
 
+    data.append('Body', 'hello test1');
+
+    data.append('From', '+18509902046');
+
+
+
+    var config = {
+        method: 'get',
+        url: 'https://api.twilio.com/2010-04-01/Accounts/AC8315088cafc60a9b164b591352bef4f1/Messages.json',
+        headers: {
+            'Authorization': 'Basic QUM4MzE1MDg4Y2FmYzYwYTliMTY0YjU5MTM1MmJlZjRmMToyNWMxMWJhNjY3MDA3NzllM2FhMTg2NTkxNjVjMWVmOA==',
+            ...data.getHeaders()
+        },
+        data: data
+    };
+
+    axios(config)
+        .then(function (response) {
+            res.send(JSON.stringify(response.data))
+        })
+        .catch(function (error) {
+            res.send(JSON.stringify(error))
+        });
 })
+
+
 //createRoutes("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/");
 app.use(routes)
 app.listen(3000);
