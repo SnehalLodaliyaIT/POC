@@ -1,25 +1,28 @@
 var axios = require('axios');
+var data = {};
 
+    
+        let qs = require('qs');
+        data = qs.stringify(data)
+        
 
-var config = {
-    method: 'post',
-    url: 'https://gitlab.com/api/v4/projects/projects/',
-    headers: {
+            var config = {
+            method: 'get',
+                url: 'https://api.stripe.com/v1/customers',
+                    headers: {
+                    
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                            
+                                
+                                    'Authorization': 'Bearer sk_test_51IGODeLmKFVeRxasabVS8cGsHYNc99ClS7dReBchuh5ixIlxtGOUT0EPtPYqpwUd6zX33d430fBiOnXWdiS2066t00P7nusZQG'
+                                        },
+                                        data : data
+                                        };
 
-        'Content-Type': 'application/json',
-
-
-
-        'Authorization': 'Bearer ytxGD7exT_Qe9YVxuLJC'
-
-
-    }
-};
-
-axios(config)
-    .then(function (response) {
-        res.send(JSON.stringify(response.data))
-    })
-    .catch(function (error) {
-        res.send(JSON.stringify(error))
-    });
+                                        axios(config)
+                                        .then(function (response) {
+                                        res.send(JSON.stringify(response))
+                                        })
+                                        .catch(function (error) {
+                                        res.send(JSON.stringify(error))
+                                        });

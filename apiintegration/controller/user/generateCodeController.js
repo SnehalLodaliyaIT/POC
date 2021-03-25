@@ -10,7 +10,7 @@ const stripecode = require('../../STRIPE/app');
 const razorpaycode = require('../../RAZORPAY/app');
 const mailguncode = require('../../MAILGUN/app');
 const twillocode = require('../../TWILLO/app');
-const gitlabcode =require('../../GITLAB/app');
+const gitlabcode = require('../../GITLAB/app');
 
 async function loadTemplate(name) {
     console.log(__dirname);
@@ -116,9 +116,35 @@ async function generateGmailCode(req, res) {
     res.send("success")
 }
 
+async function generateMultipleCode(req, res) {
+    const params = { ...req.body }
+    let data = params.data;
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].thirdPartyAPI === "STRIPE") {
+            try {
+                if (fs.existsSync("./ThirdPartyAPI")) {
+                    console.log("Directory exists.")
+                    return "success"
+                } else {
+                    fs.mkdir(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration", 'ThirdPartyAPI'),async (err) => {
+                        if (err) {
+                            return console.error(err);
+                        } else {
+                            await stripecode.generateMultipleStripeCode(data[0].APIs[0]);
+                        }
+                    });
+                }
+            } catch (e) {
+                console.log("An error occurred.")
+            }
+        }
+    }
+    return "success"
+}
 
 module.exports = {
     generateCode,
     generateGmailCode,
+    generateMultipleCode,
     generateStripeCode
 }
