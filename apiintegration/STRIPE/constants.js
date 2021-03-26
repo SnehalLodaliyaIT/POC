@@ -1,5 +1,5 @@
 module.exports = {
-    auth:"Bearer sk_test_51IGOMfBuOumXPWbaDEIJsTcnOJY2QdFc1CPiqLLjLmypWdoRzIFrCvPBduVUXeOhTELNxyM2V36s0xkdlh4v2t9E005eCsYGcr",
+    auth:"Bearer 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",
     baseURL:"https://api.stripe.com/v1/",
     contentType:"application/x-www-form-urlencoded"
 };

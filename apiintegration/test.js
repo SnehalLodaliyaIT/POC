@@ -1,28 +1,31 @@
-var axios = require('axios');
-var data = {};
 
-    
-        let qs = require('qs');
-        data = qs.stringify(data)
-        
+    var axios = require('axios');
+    let qs = require('qs');
+    var data = {};
 
-            var config = {
+async function createCustomer(stripeObject){
+    try {
+        data = qs.stringify(stripeObject)
+        var config = {
             method: 'get',
-                url: 'https://api.stripe.com/v1/customers',
-                    headers: {
-                    
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                            
-                                
-                                    'Authorization': 'Bearer sk_test_51IGODeLmKFVeRxasabVS8cGsHYNc99ClS7dReBchuh5ixIlxtGOUT0EPtPYqpwUd6zX33d430fBiOnXWdiS2066t00P7nusZQG'
-                                        },
-                                        data : data
-                                        };
+            url: 'https://api.stripe.com/v1/customers',
+            headers: {
+                'Authorization': 'Bearer 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'
+            },
+            data: data
+        };
+        if(Object.keys(stripeObject).length){
+            config.headers[Content-Type]='application/x-www-form-urlencoded';
+        }
+       let result= await axios(config)
+       return result.data;
+    } catch (error) {
+        return error;
+    }
+}
 
-                                        axios(config)
-                                        .then(function (response) {
-                                        res.send(JSON.stringify(response))
-                                        })
-                                        .catch(function (error) {
-                                        res.send(JSON.stringify(error))
-                                        });
+
+    module.exports = {
+        createCustomer
+    }
+

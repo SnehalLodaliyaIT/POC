@@ -117,29 +117,54 @@ async function generateGmailCode(req, res) {
 }
 
 async function generateMultipleCode(req, res) {
-    const params = { ...req.body }
-    let data = params.data;
-    for (let i = 0; i < data.length; i++) {
-        if (data[i].thirdPartyAPI === "STRIPE") {
+    try {
+        const params = { ...req.body }
+        let data = params.data;
+        for (let i = 0; i < data.length; i++) {
             try {
-                if (fs.existsSync("./ThirdPartyAPI")) {
-                    console.log("Directory exists.")
-                    return "success"
-                } else {
-                    fs.mkdir(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration", 'ThirdPartyAPI'),async (err) => {
+                if (!fs.existsSync("./ThirdPartyAPI")) {
+                    fs.mkdir(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration", 'ThirdPartyAPI'), async (err) => {
                         if (err) {
-                            return console.error(err);
-                        } else {
-                            await stripecode.generateMultipleStripeCode(data[0].APIs[0]);
+                            res.send(err);
                         }
                     });
                 }
-            } catch (e) {
-                console.log("An error occurred.")
+                if (data[i].thirdPartyAPI === "STRIPE") {
+                    try {
+                        if (!data[i].isRepeated) {
+                            await stripecode.initializeStripeCode(data[i].Authentication, (error) => {
+                                res.send(error);
+                            });
+                        }
+                        await stripecode.generateMultipleStripeCode(data[i].APIs);
+                        res.send("success")
+                    } catch (error) {
+                        console.log(`An error occurred at generate ${data[i].thirdPartyAPI} 's API code...`);
+                        res.send(error)
+                    }
+                }
+                else if (data[i].thirdPartyAPI === "PAYTM") {
+                    try {
+                        if (data[i].isRepeated) {
+                            await stripecode.initializeStripeCode(data[i].Authentication, (error) => {
+                                res.send(error);
+                            });
+                        }
+                        await stripecode.generateMultipleStripeCode(data[0].APIs[0]);
+                        res.send("success")
+                    } catch (error) {
+                        console.log(`An error occurred at generate ${data[i].thirdPartyAPI} 's API code...`);
+                        res.send(error)
+                    }
+                }
+            } catch (error) {
+                res.send(error);
             }
         }
+    } catch (error) {
+        res.send(error)
     }
-    return "success"
+
 }
 
 module.exports = {

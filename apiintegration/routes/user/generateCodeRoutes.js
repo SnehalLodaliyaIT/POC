@@ -5,7 +5,7 @@ const generateCodeController = require("../../controller/user/generateCodeContro
 router.route("/generateStripeCode").post(generateCodeController.generateStripeCode)
 router.route("/generateImportCode").post(generateCodeController.generateCode)
 router.route("/generateGmailCode").post(generateCodeController.generateGmailCode)
-
+router.route("/generateMultipleCode").post(generateCodeController.generateMultipleCode)
 
     
 

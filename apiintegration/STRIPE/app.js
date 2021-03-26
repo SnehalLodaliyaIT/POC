@@ -22,14 +22,13 @@ function loadTemplate(name) {
     }
 }
 
-
-
 let detailsForStripeCode = {
     "data": {},
     "method": "get",
     "url": stripe_constant.baseURL + "customers",
     "auth": stripe_constant.auth,
     "contentType": stripe_constant.contentType,
+    "methodName": "generateCustomer",
 }
 function write(file, str, mode) {
     fs.writeFileSync(file, str, { mode: mode || MODE_0666 })
@@ -46,6 +45,89 @@ async function generateStripeCode() {
     write(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration", './test.js'), app.render());
     console.log("success")
 }
-module.exports = {
-    generateStripeCode
+async function generateMultipleStripeCode(APIsOfStripe) {
+    try {
+        let fileExists;
+        if (fs.existsSync("./ThirdPartyAPI/stripe.js")) {
+            fileExists = true;
+        } else {
+            fileExists = false;
+        }
+        for (let i = 0; i < APIsOfStripe.length; i++) {
+            await generateStripeAPI(APIsOfStripe[i], fileExists, (error, data) => {
+                if (error)
+                    return error;
+                console.log(data);
+            })
+            fileExists = true;
+        }
+        return ("success")
+    } catch (error) {
+        return error;
+    }
 }
+async function generateStripeAPI(objOfStripeAPI, fileExists) {
+    try {
+        let app = await loadTemplate('stripeService');
+        app.locals.details = objOfStripeAPI.data;
+        app.locals.method = objOfStripeAPI.method;
+        app.locals.url = objOfStripeAPI.url;
+        app.locals.methodName = objOfStripeAPI.methodName;
+        app.locals.fileExists = fileExists;
+        if (fileExists) {
+            const codetest = app.render();
+            var newcode;
+            let data =  fs.readFileSync('/home/snehallodaliya/Downloads/POC/POC/apiintegration/ThirdPartyAPI/stripe.js', 'utf8', function (err, data) {
+                if (err) {
+                    return error;
+                }
+                return data;
+
+            });
+            var string = data.split("module.exports = {");
+            newcode = string[0] + codetest + "\n" + "module.exports = {" + "\n" + "\t" + objOfStripeAPI.methodName + "," + string[1]
+            write(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/ThirdPartyAPI", './stripe.js'), newcode);
+        } else {
+          await  write(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/ThirdPartyAPI", './stripe.js'), app.render());
+        }
+        return "Success"
+    } catch (error) {
+        return error;
+    }
+}
+async function initializeStripeCode(detailsOfStripe) {
+    try {
+        let constantCode = `STRIPE:{${'\n'}${'\t'}${'\t'} STRIPE_BASEURL: "${detailsOfStripe.baseURL}",${'\n'}${'\t'}${'\t'}STRIPE_TOKEN_TYPE: "Bearer" ${'\n'}${'\t'} }`
+
+        var newcode;
+        fs.readFile('/home/snehallodaliya/Downloads/POC/POC/apiintegration/constant.js', 'utf8', function (err, data) {
+            if (err) {
+                return console.log(err);
+            }
+            var string = data.split("module.exports={");
+            newcode = "module.exports = {" + "\n" + "\t" + constantCode + "," + "\n" + string[1]
+            write(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/", './constant.js'), newcode);
+
+        });
+        let envCode = `${'\n'}STRIPE_PUBLISHED_KEY=${detailsOfStripe.publishedKey}${'\n'}STRIPE_SECRET_KEY=${detailsOfStripe.secretKey}${'\n'}`
+        var newcode;
+        fs.readFile('/home/snehallodaliya/Downloads/POC/POC/apiintegration/.env', 'utf8', function (err, data) {
+            if (err) {
+                return console.log(err);
+            }
+            newcode = data + envCode
+            write(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/", './.env'), newcode);
+
+        });
+    } catch (error) {
+        return error;
+    }
+
+}
+module.exports = {
+    generateStripeCode,
+    generateMultipleStripeCode,
+    initializeStripeCode,
+    generateStripeAPI
+}
+

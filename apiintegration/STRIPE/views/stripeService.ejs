@@ -1,0 +1,31 @@
+<%_ if(!fileExists){ %>
+var axios = require('axios');
+let qs = require('qs');
+let stripeDetails=require('../constant');
+var data = {};
+<%_ } %>
+async function <%- methodName %>(stripeObject){
+    try {
+        data = qs.stringify(stripeObject)
+        var config = {
+            method: <%= method %>,
+            url: `${stripeDetails.STRIPE.STRIPE_BASEURL}<%- url %>`,
+            headers: {
+                'Authorization': `${stripeDetails.STRIPE.STRIPE_TOKEN_TYPE} ${process.env.STRIPE_SECRET_KEY}`
+            },
+            data: data
+        };
+        if(Object.keys(stripeObject).length){
+            config.headers[Content-Type]='application/x-www-form-urlencoded';
+        }
+       let result= await axios(config)
+       return result.data;
+    } catch (error) {
+        return error;
+    }
+}
+<%_ if(!fileExists){ %>
+module.exports = {
+    <%- methodName %>
+}
+<%_ } %>

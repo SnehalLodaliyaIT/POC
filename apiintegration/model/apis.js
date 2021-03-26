@@ -31,6 +31,7 @@ const schema = new Schema(
 		type: Schema.Types.ObjectId,
 		ref: "modulesOfMarketPlace"
 	},
+    methodName:String,
 	methodType: String,
 	url: String,
 	parameters: Array,

@@ -7,6 +7,9 @@ const got = require("got");
 const marketPlace = require('./model/marketPlace');
 const master = require('./model/master');
 const _ = require('lodash');
+let dotenv=require('dotenv');
+dotenv=dotenv.config();
+//const stripe=require('./ThirdPartyAPI/stripe');
 
 
 const ejs = require('ejs');
@@ -131,36 +134,9 @@ async function createRoutes(dir) {
 
 
 app.get('/test-stripe', async (req, res) => {
-    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
-    var axios = require('axios');
-    var FormData = require('form-data');
-    var data = new FormData();
-    data.append('from', 'postmaster@sandbox4dc45d2bc5d24fcd8180c43344347a2f.mailgun.org');
-    data.append('to', 'snehallodaliya7621@gmail.com');
-    data.append('subject', 'Tracking test');
-    data.append('text', 'Hello World');
-    data.append('o:tag', 'tracking_test');
-    data.append('o:tracking', 'yes');
-
-    var config = {
-        method: 'post',
-        url: 'https://api.mailgun.net/v3/sandbox4dc45d2bc5d24fcd8180c43344347a2f.mailgun.org/messages',
-        headers: {
-            'Authorization': 'Basic YXBpOjk2ZWQyNDI2ODFhZGVkMWY1MDE4ZGIyMTlkZjNjN2JlLTczZTU3ZmVmLTU3YmVhYWM3',
-            ...data.getHeaders()
-        },
-        data: data
-    };
-
-    axios(config)
-        .then(function (response) {
-            console.log(JSON.stringify(response.data));
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-
-
+    const stripeobj={}
+   let data //=await stripe.getAllCustomer(stripeobj)
+    res.send( data);
 });
 
 app.get('/test-mailgun', async (req, res) => {
