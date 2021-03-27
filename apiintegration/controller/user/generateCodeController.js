@@ -1,6 +1,4 @@
-const utils = require("../../utils/messages")
-const validation = require("../../utils/validateRequest");
-const service = require("../../utils/dbService");
+const userService = require("../../services/user/generateCode");
 const fs = require('fs');
 const path = require('path');
 const ejs = require('ejs');
@@ -129,34 +127,20 @@ async function generateMultipleCode(req, res) {
                         }
                     });
                 }
-                if (data[i].thirdPartyAPI === "STRIPE") {
-                    try {
-                        if (!data[i].isRepeated) {
-                            await stripecode.initializeStripeCode(data[i].Authentication, (error) => {
-                                res.send(error);
-                            });
+                switch (data[i].thirdPartyAPI) {
+                    case "STRIPE":
+                        try {
+                            let result=await userService.generateCodeForStripe(data[i]);
+                            res.send(result);
+                        } catch (error) {
+                            console.log(`An error occurred at generate ${data[i].thirdPartyAPI} 's API code...`);
+                            res.send("Error for generate stripe code..", error);
                         }
-                        await stripecode.generateMultipleStripeCode(data[i].APIs);
-                        res.send("success")
-                    } catch (error) {
-                        console.log(`An error occurred at generate ${data[i].thirdPartyAPI} 's API code...`);
-                        res.send(error)
-                    }
+                        break;
+                    default:
+                        break;
                 }
-                else if (data[i].thirdPartyAPI === "PAYTM") {
-                    try {
-                        if (data[i].isRepeated) {
-                            await stripecode.initializeStripeCode(data[i].Authentication, (error) => {
-                                res.send(error);
-                            });
-                        }
-                        await stripecode.generateMultipleStripeCode(data[0].APIs[0]);
-                        res.send("success")
-                    } catch (error) {
-                        console.log(`An error occurred at generate ${data[i].thirdPartyAPI} 's API code...`);
-                        res.send(error)
-                    }
-                }
+
             } catch (error) {
                 res.send(error);
             }

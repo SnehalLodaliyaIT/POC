@@ -69,11 +69,12 @@ async function generateMultipleStripeCode(APIsOfStripe) {
 async function generateStripeAPI(objOfStripeAPI, fileExists) {
     try {
         let app = await loadTemplate('stripeService');
-        app.locals.details = objOfStripeAPI.data;
+        app.locals.details = objOfStripeAPI.body;
         app.locals.method = objOfStripeAPI.method;
         app.locals.url = objOfStripeAPI.url;
         app.locals.methodName = objOfStripeAPI.methodName;
         app.locals.fileExists = fileExists;
+        app.locals.queryParams=objOfStripeAPI.queryParams;
         if (fileExists) {
             const codetest = app.render();
             var newcode;
@@ -99,18 +100,18 @@ async function initializeStripeCode(detailsOfStripe) {
     try {
         let constantCode = `STRIPE:{${'\n'}${'\t'}${'\t'} STRIPE_BASEURL: "${detailsOfStripe.baseURL}",${'\n'}${'\t'}${'\t'}STRIPE_TOKEN_TYPE: "Bearer" ${'\n'}${'\t'} }`
 
-        var newcode;
+        let newcode;
         fs.readFile('/home/snehallodaliya/Downloads/POC/POC/apiintegration/constant.js', 'utf8', function (err, data) {
             if (err) {
                 return console.log(err);
             }
-            var string = data.split("module.exports={");
+            var string = data.split("module.exports = {");
             newcode = "module.exports = {" + "\n" + "\t" + constantCode + "," + "\n" + string[1]
             write(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/", './constant.js'), newcode);
 
         });
         let envCode = `${'\n'}STRIPE_PUBLISHED_KEY=${detailsOfStripe.publishedKey}${'\n'}STRIPE_SECRET_KEY=${detailsOfStripe.secretKey}${'\n'}`
-        var newcode;
+        newcode="";
         fs.readFile('/home/snehallodaliya/Downloads/POC/POC/apiintegration/.env', 'utf8', function (err, data) {
             if (err) {
                 return console.log(err);

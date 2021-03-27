@@ -6,16 +6,16 @@ var data = {};
 <%_ } %>
 async function <%- methodName %>(stripeObject){
     try {
-        data = qs.stringify(stripeObject)
+        data = qs.stringify(stripeObject.body)
         var config = {
             method: <%= method %>,
-            url: `${stripeDetails.STRIPE.STRIPE_BASEURL}<%- url %>`,
+            url: `${stripeDetails.STRIPE.STRIPE_BASEURL}<%- url %>/<%_ if(queryParams.length){  for(var i=0; i< queryParams.length; i++) { %>${stripeObject.queryParams.<%- queryParams[i] %>}<%_ if(i != queryParams.length-1)  { %>/<% } %><%_ } _%> <%_ } %>`,
             headers: {
                 'Authorization': `${stripeDetails.STRIPE.STRIPE_TOKEN_TYPE} ${process.env.STRIPE_SECRET_KEY}`
             },
             data: data
         };
-        if(Object.keys(stripeObject).length){
+        if(Object.keys(stripeObject.body).length){
             config.headers[Content-Type]='application/x-www-form-urlencoded';
         }
        let result= await axios(config)

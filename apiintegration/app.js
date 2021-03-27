@@ -134,7 +134,10 @@ async function createRoutes(dir) {
 
 
 app.get('/test-stripe', async (req, res) => {
-    const stripeobj={}
+    const stripeobj={
+        "body":{},
+        "queryParams":{}
+    }
    let data //=await stripe.getAllCustomer(stripeobj)
     res.send( data);
 });
