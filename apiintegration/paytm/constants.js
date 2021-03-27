@@ -1,4 +1,5 @@
 module.exports = {
+    "base_url": "https://securegw-stage.paytm.in/theia/api/v1",
     "mid": "NUigXp26888780822392",
     "mkey": "ApCQ&NjRQIxALPqv",
     "website": "WEBSTAGING",

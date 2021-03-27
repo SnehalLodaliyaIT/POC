@@ -93,5 +93,92 @@ function write(file, str, mode) {
     fs.writeFileSync(file, str, { mode: MODE_0666 })
 }
 
+async function initializePaytmCode(detailsOfPaytm) {
+    try {
+        let constantCode = `PAYTM:{${'\n'}${'\t'}${'\t'} PAYTM_BASEURL: "${detailsOfPaytm.baseURL}",${'\n'}${'\t'}${'\t'}WEBSITE: "${detailsOfPaytm.website}" ,${'\n'}${'\t'}${'\t'}INDUSTRY_TYPE:"${detailsOfPaytm.Industry_Type}" ,${'\n'}${'\t'}${'\t'} CHANNEL_ID_WEB:"${detailsOfPaytm.Channel_ID_WEB}", ${'\n'}${'\t'}${'\t'} Channel_ID_APP:"${detailsOfPaytm.Channel_ID_APP}" }`
+
+        let newcode;
+        fs.readFile('/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/constant.js', 'utf8', function (err, data) {
+            if (err) {
+                return console.log(err);
+            }
+            var string = data.split("module.exports = {");
+            newcode = "module.exports = {" + "\n" + "\t" + constantCode + "," + "\n" + string[1]
+            write(path.join("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/", './constant.js'), newcode);
+        });
+
+
+        let envCode = `${'\n'}PAYTM_MERCHANT_ID=${detailsOfPaytm.mid}${'\n'}PAYTM_MERCHANT_KEY=${detailsOfPaytm.mkey}${'\n'}`
+        newcode = ""
+        fs.readFile('/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/.env', 'utf8', function (err, data) {
+            if (err) {
+                return console.log(err);
+            }
+            newcode = data + envCode
+            write(path.join("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/", './.env'), newcode);
+
+        });
+    } catch (error) {
+        return error;
+    }
+
+}
+
+async function generateMultiplePaytmCode(APIsOfPaytm) {
+    try {
+        let fileExists;
+        if (fs.existsSync("./ThirdPartyAPI/paytm.js")) {
+            fileExists = true;
+        } else {
+            fileExists = false;
+        }
+        for (let i = 0; i < APIsOfPaytm.length; i++) {
+            await generatePaytmAPI(APIsOfPaytm[i], fileExists, (error, data) => {
+                if (error)
+                    return error;
+                console.log(data);
+            })
+            fileExists = true;
+        }
+        return ("success")
+    } catch (error) {
+        return error;
+    }
+}
+
+async function generatePaytmAPI(objOfPaytmAPI, fileExists) {
+    try {
+        let app = await loadTemplate('paytmService');
+        app.locals.details = objOfPaytmAPI.data;
+        app.locals.method = objOfPaytmAPI.method;
+        app.locals.url = objOfPaytmAPI.url;
+        app.locals.methodName = objOfPaytmAPI.methodName;
+        app.locals.fileExists = fileExists;
+        if (fileExists) {
+            const codetest = app.render();
+            var newcode;
+            let data = fs.readFileSync('/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/ThirdPartyAPI/paytm.js', 'utf8', function (err, data) {
+                if (err) {
+                    return error;
+                }
+                return data;
+
+            });
+            var string = data.split("module.exports = {");
+            newcode = string[0] + codetest + "\n" + "module.exports = {" + "\n" + "\t" + objOfPaytmAPI.methodName + "," + string[1]
+            write(path.join("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/ThirdPartyAPI", './stripe.js'), newcode);
+        } else {
+            await write(path.join("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/ThirdPartyAPI", './stripe.js'), app.render());
+        }
+        return "Success"
+    } catch (error) {
+        return error;
+    }
+}
+
+module.exports = {
+    initializePaytmCode,
+    generateMultiplePaytmCode
+}
 
 app.listen(8000);;

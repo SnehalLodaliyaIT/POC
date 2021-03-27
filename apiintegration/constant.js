@@ -1,6 +1,9 @@
 module.exports = {
-	STRIPE:{
-		 STRIPE_BASEURL: "https://api.stripe.com",
-		STRIPE_TOKEN_TYPE: "Bearer" 
-	 },
+	PAYTM: {
+		PAYTM_BASEURL: "https://securegw-stage.paytm.in/theia/api/v1",
+		WEBSITE: "WEBSTAGING",
+		INDUSTRY_TYPE: "Retail",
+		CHANNEL_ID_WEB: "WEB",
+		Channel_ID_APP: "WAP"
+	},
 }

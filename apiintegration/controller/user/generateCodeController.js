@@ -11,6 +11,7 @@ const razorpaycode = require('../../RAZORPAY/app');
 const mailguncode = require('../../MAILGUN/app');
 const twillocode = require('../../TWILLO/app');
 const gitlabcode = require('../../GITLAB/app');
+const paytmCode = require('../../paytm/app')
 
 async function loadTemplate(name) {
     console.log(__dirname);
@@ -123,7 +124,7 @@ async function generateMultipleCode(req, res) {
         for (let i = 0; i < data.length; i++) {
             try {
                 if (!fs.existsSync("./ThirdPartyAPI")) {
-                    fs.mkdir(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration", 'ThirdPartyAPI'), async (err) => {
+                    fs.mkdir(path.join("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration", 'ThirdPartyAPI'), async (err) => {
                         if (err) {
                             res.send(err);
                         }
@@ -145,12 +146,12 @@ async function generateMultipleCode(req, res) {
                 }
                 else if (data[i].thirdPartyAPI === "PAYTM") {
                     try {
-                        if (data[i].isRepeated) {
-                            await stripecode.initializeStripeCode(data[i].Authentication, (error) => {
+                        if (!data[i].isRepeated) {
+                            await paytmCode.initializePaytmCode(data[i].Authentication, (error) => {
                                 res.send(error);
                             });
                         }
-                        await stripecode.generateMultipleStripeCode(data[0].APIs[0]);
+                        await paytmCode.generateMultiplePaytmCode(data[0].APIs[0]);
                         res.send("success")
                     } catch (error) {
                         console.log(`An error occurred at generate ${data[i].thirdPartyAPI} 's API code...`);
