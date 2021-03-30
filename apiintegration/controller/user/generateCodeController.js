@@ -122,7 +122,7 @@ async function generateMultipleCode(req, res) {
         for (let i = 0; i < data.length; i++) {
             try {
                 if (!fs.existsSync("./ThirdPartyAPI")) {
-                    fs.mkdir(path.join("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration", 'ThirdPartyAPI'), async (err) => {
+                    fs.mkdir(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration", 'ThirdPartyAPI'), async (err) => {
                         if (err) {
                             res.send(err);
                         }
@@ -131,7 +131,7 @@ async function generateMultipleCode(req, res) {
                 switch (data[i].thirdPartyAPI) {
                     case "STRIPE":
                         try {
-                            let result=await userService.generateCodeForStripe(data[i]);
+                            let result = await userService.generateCodeForStripe(data[i]);
                             res.send(result);
                         } catch (error) {
                             console.log(`An error occurred at generate ${data[i].thirdPartyAPI} 's API code...`);
@@ -139,19 +139,27 @@ async function generateMultipleCode(req, res) {
                         }
                         break;
                     case "PAYTM":
-                            try {
-                                if (!data[i].isRepeated) {
-                                    await paytmCode.initializePaytmCode(data[i].Authentication, (error) => {
-                                        res.send(error);
-                                    });
-                                }
-                                await paytmCode.generateMultiplePaytmCode(data[0].APIs[0]);
-                                res.send("success")
-                            } catch (error) {
-                                console.log(`An error occurred at generate ${data[i].thirdPartyAPI} 's API code...`);
-                                res.send(error)
+                        try {
+                            if (!fs.existsSync("./ThirdPartyAPI/paytm")) {
+                                fs.mkdir(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/ThirdPartyAPI", 'paytm'), async (err) => {
+                                    if (err) {
+                                        res.send(err);
+                                    }
+                                });
                             }
-                            break;
+                            if (!data[i].isRepeated) {
+                                
+                                await paytmCode.initializePaytmCode(data[i].Authentication, (error) => {
+                                    res.send(error);
+                                });
+                            }
+                            let result=await paytmCode.generateMultiplePaytmCode(data[i].APIs);
+                            res.send(result)
+                        } catch (error) {
+                            console.log(`An error occurred at generate ${data[i].thirdPartyAPI} 's API code...`);
+                            res.send(error)
+                        }
+                        break;
                     default:
                         break;
                 }

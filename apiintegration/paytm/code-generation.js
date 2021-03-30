@@ -27,3 +27,33 @@ res.send(JSON.stringify(response.data))
 .catch(function (error) {
 res.send(JSON.stringify(error))
 });
+
+var PaytmChecksum = require("./PaytmChecksum");
+var constants = require('../../constant');
+
+var paytmParams = {};
+async function generateCheckSum(body) {
+    paytmParams = body;
+    paytmParams.mid=env.process.PAYTM_MERCHANT_ID;
+    paytmParams.websiteName=constants.PAYTM.WEBSITE
+
+    var paytmChecksum = PaytmChecksum.generateSignature(paytmParams, process.env.PAYTM_MERCHANT_KEY);
+    let data = paytmChecksum.then(async function (result) {
+        console.log(result);
+        let verifyChecksum = await PaytmChecksum.verifySignature(paytmParams, process.env.PAYTM_MERCHANT_KEY, result);
+        console.log(verifyChecksum);
+        if (verifyChecksum) {
+            return result
+        }
+        else {
+            return null;
+        }
+
+    }).catch(function (error) {
+        console.log(error);
+    });
+    return data;
+}
+module.exports ={
+    generateCheckSum
+} 

@@ -70,10 +70,7 @@ app.get('/test', async (req, res) => {
         method: 'POST',
         url: 'https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid=NUigXp26888780822392&orderId=725.1171490692083',
         headers: {
-
             'Content-Type': 'application/json',
-
-
         },
         data: data
     }
@@ -98,28 +95,35 @@ async function initializePaytmCode(detailsOfPaytm) {
         let constantCode = `PAYTM:{${'\n'}${'\t'}${'\t'} PAYTM_BASEURL: "${detailsOfPaytm.baseURL}",${'\n'}${'\t'}${'\t'}WEBSITE: "${detailsOfPaytm.website}" ,${'\n'}${'\t'}${'\t'}INDUSTRY_TYPE:"${detailsOfPaytm.Industry_Type}" ,${'\n'}${'\t'}${'\t'} CHANNEL_ID_WEB:"${detailsOfPaytm.Channel_ID_WEB}", ${'\n'}${'\t'}${'\t'} Channel_ID_APP:"${detailsOfPaytm.Channel_ID_APP}" }`
 
         let newcode;
-        fs.readFile('/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/constant.js', 'utf8', function (err, data) {
+        fs.readFile('/home/snehallodaliya/Downloads/POC/POC/apiintegration/constant.js', 'utf8', function (err, data) {
             if (err) {
                 return console.log(err);
             }
             var string = data.split("module.exports = {");
             newcode = "module.exports = {" + "\n" + "\t" + constantCode + "," + "\n" + string[1]
-            write(path.join("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/", './constant.js'), newcode);
+            write(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/", './constant.js'), newcode);
         });
 
 
         let envCode = `${'\n'}PAYTM_MERCHANT_ID=${detailsOfPaytm.mid}${'\n'}PAYTM_MERCHANT_KEY=${detailsOfPaytm.mkey}${'\n'}`
         newcode = ""
-        fs.readFile('/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/.env', 'utf8', function (err, data) {
+        fs.readFile('/home/snehallodaliya/Downloads/POC/POC/apiintegration/.env', 'utf8', function (err, data) {
             if (err) {
                 return console.log(err);
             }
             newcode = data + envCode
-            write(path.join("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/", './.env'), newcode);
+            write(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/", './.env'), newcode);
 
         });
+
+        fs.copyFile('/home/snehallodaliya/Downloads/POC/POC/apiintegration/paytm/PaytmChecksum.js', '/home/snehallodaliya/Downloads/POC/POC/apiintegration/ThirdPartyAPI/paytm/PaytmChecksum.js', (err) => {
+            if (err) 
+                throw err;
+            console.log('source.txt was copied to destination.txt');
+        });
+        
     } catch (error) {
-        return error;
+        throw error;
     }
 
 }
@@ -127,20 +131,17 @@ async function initializePaytmCode(detailsOfPaytm) {
 async function generateMultiplePaytmCode(APIsOfPaytm) {
     try {
         let fileExists;
-        if (fs.existsSync("./ThirdPartyAPI/paytm.js")) {
+        if (fs.existsSync("./ThirdPartyAPI/paytm/paytm.js")) {
             fileExists = true;
         } else {
             fileExists = false;
         }
+        let result;
         for (let i = 0; i < APIsOfPaytm.length; i++) {
-            await generatePaytmAPI(APIsOfPaytm[i], fileExists, (error, data) => {
-                if (error)
-                    return error;
-                console.log(data);
-            })
+            result= await generatePaytmAPI(APIsOfPaytm[i], fileExists);
             fileExists = true;
         }
-        return ("success")
+        return (result)
     } catch (error) {
         return error;
     }
@@ -148,16 +149,18 @@ async function generateMultiplePaytmCode(APIsOfPaytm) {
 
 async function generatePaytmAPI(objOfPaytmAPI, fileExists) {
     try {
-        let app = await loadTemplate('paytmService');
+        let app = await loadTemplate('paytmService1');
         app.locals.details = objOfPaytmAPI.data;
         app.locals.method = objOfPaytmAPI.method;
         app.locals.url = objOfPaytmAPI.url;
         app.locals.methodName = objOfPaytmAPI.methodName;
         app.locals.fileExists = fileExists;
+        app.locals,queryParams=objOfPaytmAPI.queryParams;
         if (fileExists) {
             const codetest = app.render();
             var newcode;
-            let data = fs.readFileSync('/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/ThirdPartyAPI/paytm.js', 'utf8', function (err, data) {
+            //saloni path =dhwaniparekh/Coruscate_Saloni
+            let data = fs.readFileSync('/home/snehallodaliya/Downloads/POC/POC/apiintegration/ThirdPartyAPI/paytm/paytm.js', 'utf8', function (err, data) {
                 if (err) {
                     return error;
                 }
@@ -166,13 +169,14 @@ async function generatePaytmAPI(objOfPaytmAPI, fileExists) {
             });
             var string = data.split("module.exports = {");
             newcode = string[0] + codetest + "\n" + "module.exports = {" + "\n" + "\t" + objOfPaytmAPI.methodName + "," + string[1]
-            write(path.join("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/ThirdPartyAPI", './stripe.js'), newcode);
+            write(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/ThirdPartyAPI/paytm/", 'paytm.js'), newcode);
         } else {
-            await write(path.join("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/ThirdPartyAPI", './stripe.js'), app.render());
+            console.log("file not exists")
+            write(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/ThirdPartyAPI/paytm/", 'paytm.js'), app.render());
         }
         return "Success"
     } catch (error) {
-        return error;
+        throw error;
     }
 }
 

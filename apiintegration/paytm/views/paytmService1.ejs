@@ -1,0 +1,65 @@
+<%_ if(!fileExists){ %>
+const axios = require('axios');
+var PaytmChecksum = require("./PaytmChecksum");
+let constants=require('../../constant');
+var data = {};
+
+var paytmParams = {};
+async function generateCheckSum(body) {
+    paytmParams = body;
+    
+    var paytmChecksum = PaytmChecksum.generateSignature(paytmParams, process.env.PAYTM_MERCHANT_KEY);
+    let data = paytmChecksum.then(async function (result) {
+        let verifyChecksum = await PaytmChecksum.verifySignature(paytmParams, process.env.PAYTM_MERCHANT_KEY, result);
+        if (verifyChecksum) {
+            return result
+        }
+        else {
+            return null;
+        }
+
+    }).catch(function (error) {
+        console.log(error);
+    });
+    return data;
+}
+<%_ } %>
+async function <%- methodName %>(paytmObject){
+    try {
+        paytmObject.body.mid = process.env.PAYTM_MERCHANT_ID;
+        paytmObject.body.websiteName = constants.PAYTM.WEBSITE;
+        let signature = await generateCheckSum(JSON.stringify(paytmObject.body));
+        Object.assign(paytmObject, {
+            head: {
+                "signature": signature
+            }
+        })
+        data = JSON.stringify(paytmObject)
+        
+        var config = {
+            method: <%= method %>,
+            url: `${constants.PAYTM.PAYTM_BASEURL}<%- url %><%_ if(queryParams.length){ %>? <%_ for(let i=0;i< queryParams.length; i++){ %> <%_ if(queryParams[i] === "mid"){ %><%- queryParams[i] %>=${process.env.PAYTM_MERCHANT_ID} <%_ }else { %><%- queryParams[i] %>=${paytmObject.queryParams.<%- queryParams[i] %>} <%_ } %> <%_ if(i != queryParams.length-1 ){ %>& <%_ } %><%_ } %> <%_ } %>`,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+        let result =axios(config)
+        .then(function (response) {
+            console.log(response.data)
+            return(response.data);
+        })
+        .catch(function (error) {
+           return(error);
+        });
+        return result;
+    } catch (error) {
+        return error;
+    }
+}
+<%_ if(!fileExists){ %>
+module.exports = {
+    generateCheckSum,
+    <%- methodName %>
+}
+<%_ } %>

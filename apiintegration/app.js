@@ -9,6 +9,7 @@ const master = require('./model/master');
 const _ = require('lodash');
 let dotenv=require('dotenv');
 dotenv=dotenv.config();
+//const paytm=require('./ThirdPartyAPI/paytm/paytm')
 //const stripe=require('./ThirdPartyAPI/stripe');
 
 
@@ -33,45 +34,18 @@ const qs = require('qs');
 
 app.get('/test-paytm', async (req, res) => {
 
-    const Paytm = require('paytmchecksum');
-    let mid = "NUigXp26888780822392";
     var data = {
         body: {
             "requestType": "Payment",
-            "mid": mid,
-            "websiteName": "WEBSTAGING",
-            "orderId": "20",
+            "orderId": "201222",
             "txnAmount": { "value": "1.00", "currency": "INR" },
             "userInfo": { "custId": "CUST_001" },
             "callbackUrl": "https://merchant.com/callback"
         },
     }
-
-    let signature = await Paytm.generateSignature(JSON.stringify(data.body), "ApCQ&NjRQIxALPqv");
-    Object.assign(data, {
-        head: {
-            "signature": signature
-        }
-    })
-
-    data = JSON.stringify(data);
-    var config = {
-        method: 'POST',
-        url: 'https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid=' + `${mid}` + '&orderId=20',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': data.length
-        },
-        data: data
-    };
-
-    axios(config)
-        .then(function (response) {
-            res.send(response.data);
-        })
-        .catch(function (error) {
-            res.send(error);
-        });
+    
+       let result //=await paytm.initiateTransaction(data)
+        res.send (result);
 })
 
 
