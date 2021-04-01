@@ -12,7 +12,7 @@ async function generateCodeForStripe(objectOfStripe){
         await stripecode.generateMultipleStripeCode(objectOfStripe.APIs);
         return "Sucessfully generated code for stripe..";
     }catch(error){
-        return error;
+        throw error;
     }
 }
 

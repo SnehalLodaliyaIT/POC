@@ -20,7 +20,7 @@ async function createCustomer(stripeObject){
        let result= await axios(config)
        return result.data;
     } catch (error) {
-        return error;
+        throw error;
     }
 }
 

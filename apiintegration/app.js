@@ -35,13 +35,18 @@ const qs = require('qs');
 app.get('/test-paytm', async (req, res) => {
 
     var data = {
-        body: {
-            "requestType": "Payment",
-            "orderId": "201222",
-            "txnAmount": { "value": "1.00", "currency": "INR" },
-            "userInfo": { "custId": "CUST_001" },
-            "callbackUrl": "https://merchant.com/callback"
+        data:{
+            body: {
+                "requestType": "Payment",
+                "orderId": "201222234",
+                "txnAmount": { "value": "1.00", "currency": "INR" },
+                "userInfo": { "custId": "CUST_001" },
+                "callbackUrl": "https://merchant.com/callback"
+            }
         },
+        queryParams:{
+            "orderId": "201222234"
+        }
     }
     
        let result //=await paytm.initiateTransaction(data)

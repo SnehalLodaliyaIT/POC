@@ -9,7 +9,8 @@ const razorpaycode = require('../../RAZORPAY/app');
 const mailguncode = require('../../MAILGUN/app');
 const twillocode = require('../../TWILLO/app');
 const gitlabcode = require('../../GITLAB/app');
-const paytmCode = require('../../paytm/app')
+const paytmCode = require('../../paytm/app');
+const dir="/home/snehallodaliya/Downloads/POC/POC/apiintegration/";
 
 async function loadTemplate(name) {
     console.log(__dirname);
@@ -122,7 +123,7 @@ async function generateMultipleCode(req, res) {
         for (let i = 0; i < data.length; i++) {
             try {
                 if (!fs.existsSync("./ThirdPartyAPI")) {
-                    fs.mkdir(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration", 'ThirdPartyAPI'), async (err) => {
+                    fs.mkdir(path.join(`${dir}`, 'ThirdPartyAPI'), async (err) => {
                         if (err) {
                             res.send(err);
                         }
@@ -141,7 +142,7 @@ async function generateMultipleCode(req, res) {
                     case "PAYTM":
                         try {
                             if (!fs.existsSync("./ThirdPartyAPI/paytm")) {
-                                fs.mkdir(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/ThirdPartyAPI", 'paytm'), async (err) => {
+                                fs.mkdir(path.join(`${dir}ThirdPartyAPI`, 'paytm'), async (err) => {
                                     if (err) {
                                         res.send(err);
                                     }

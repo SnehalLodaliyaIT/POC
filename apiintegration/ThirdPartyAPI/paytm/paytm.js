@@ -26,77 +26,84 @@ async function generateCheckSum(body) {
 
 async function initiateTransaction(paytmObject){
     try {
-        paytmObject.body.mid = process.env.PAYTM_MERCHANT_ID;
-        paytmObject.body.websiteName = constants.PAYTM.WEBSITE;
-        let signature = await generateCheckSum(JSON.stringify(paytmObject.body));
-        Object.assign(paytmObject, {
+
+        paytmObject.data.body.mid = process.env.PAYTM_MERCHANT_ID;
+        paytmObject.data.body.websiteName = constants.PAYTM.WEBSITE;
+        let signature = await generateCheckSum(JSON.stringify(paytmObject.data.body));
+        Object.assign(paytmObject.data, {
             head: {
                 "signature": signature
             }
         })
-        data = JSON.stringify(paytmObject)
+
+        data = JSON.stringify(paytmObject.data)
         
         var config = {
             method: 'post',
-            url: `${constants.PAYTM.PAYTM_BASEURL}/theia/api/v1/initiateTransaction?mid=${process.env.PAYTM_MERCHANT_ID}&orderId=${paytmObject.body.orderId}`,
+            url: `${constants.PAYTM.PAYTM_BASEURL}/theia/api/v1/initiateTransaction?mid=${process.env.PAYTM_MERCHANT_ID}&orderId=${paytmObject.queryParams.orderId}`,
             headers: {
                 'Content-Type': 'application/json'
             },
             data: data
         };
+        
+
         let result =axios(config)
         .then(function (response) {
             console.log(response.data)
             return(response.data);
         })
         .catch(function (error) {
-           return(error);
+            throw(error);
         });
         return result;
     } catch (error) {
-        return error;
+        throw error;
     }
 }
 
 
-async function createCustomer(paytmObject){
+async function initiateTransaction(paytmObject){
     try {
-        paytmObject.body.mid = process.env.PAYTM_MERCHANT_ID;
-        paytmObject.body.websiteName = constants.PAYTM.WEBSITE;
-        let signature = await generateCheckSum(JSON.stringify(paytmObject.body));
-        Object.assign(paytmObject, {
+
+        paytmObject.data.body.mid = process.env.PAYTM_MERCHANT_ID;
+        paytmObject.data.body.websiteName = constants.PAYTM.WEBSITE;
+        let signature = await generateCheckSum(JSON.stringify(paytmObject.data.body));
+        Object.assign(paytmObject.data, {
             head: {
                 "signature": signature
             }
         })
-        data = JSON.stringify(paytmObject)
+
+        data = JSON.stringify(paytmObject.data)
         
         var config = {
-            method: 'get',
-            url: `${constants.PAYTM.PAYTM_BASEURL}/v1/customers`,
+            method: 'post',
+            url: `${constants.PAYTM.PAYTM_BASEURL}/theia/api/v1/initiateTransaction?mid=${process.env.PAYTM_MERCHANT_ID}&orderId=${paytmObject.queryParams.orderId}`,
             headers: {
                 'Content-Type': 'application/json'
             },
             data: data
         };
+        
+
         let result =axios(config)
         .then(function (response) {
             console.log(response.data)
             return(response.data);
         })
         .catch(function (error) {
-           return(error);
+            throw(error);
         });
         return result;
     } catch (error) {
-        return error;
+        throw error;
     }
 }
 
 
-
 module.exports = {
-	createCustomer,
+	initiateTransaction,
     generateCheckSum,
     initiateTransaction
 }

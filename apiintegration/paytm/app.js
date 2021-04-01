@@ -7,6 +7,12 @@ const ejs = require('ejs');
 const util = require('util');
 const path = require('path');
 const MODE_0666 = parseInt('0666', 8);
+const dir = "/home/snehallodaliya/Downloads/POC/POC/apiintegration/";
+const service = require("../utils/dbService");
+const apis = require("../model/apis")
+const constant = require("../config/constant/common")
+
+
 app.get('/', async (req, res) => {
     let orderId = (Math.random() * 1000).toString();
     let detailsForCode = {
@@ -84,8 +90,6 @@ app.get('/test', async (req, res) => {
         });
 })
 
-
-
 function write(file, str, mode) {
     fs.writeFileSync(file, str, { mode: MODE_0666 })
 }
@@ -95,33 +99,34 @@ async function initializePaytmCode(detailsOfPaytm) {
         let constantCode = `PAYTM:{${'\n'}${'\t'}${'\t'} PAYTM_BASEURL: "${detailsOfPaytm.baseURL}",${'\n'}${'\t'}${'\t'}WEBSITE: "${detailsOfPaytm.website}" ,${'\n'}${'\t'}${'\t'}INDUSTRY_TYPE:"${detailsOfPaytm.Industry_Type}" ,${'\n'}${'\t'}${'\t'} CHANNEL_ID_WEB:"${detailsOfPaytm.Channel_ID_WEB}", ${'\n'}${'\t'}${'\t'} Channel_ID_APP:"${detailsOfPaytm.Channel_ID_APP}" }`
 
         let newcode;
-        fs.readFile('/home/snehallodaliya/Downloads/POC/POC/apiintegration/constant.js', 'utf8', function (err, data) {
+        fs.readFile(`${dir}constant.js`, 'utf8', function (err, data) {
             if (err) {
                 return console.log(err);
             }
             var string = data.split("module.exports = {");
             newcode = "module.exports = {" + "\n" + "\t" + constantCode + "," + "\n" + string[1]
-            write(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/", './constant.js'), newcode);
+            write(path.join(`${dir}`, './constant.js'), newcode);
         });
 
 
-        let envCode = `${'\n'}PAYTM_MERCHANT_ID=${detailsOfPaytm.mid}${'\n'}PAYTM_MERCHANT_KEY=${detailsOfPaytm.mkey}${'\n'}`
+        let basicToken = "Basic " + Buffer.from(`${detailsOfPaytm.mid}` + ":" + `${detailsOfPaytm.mkey}`).toString('base64');
+        let envCode = `${'\n'}PAYTM_MERCHANT_ID=${detailsOfPaytm.mid}${'\n'}PAYTM_MERCHANT_KEY=${detailsOfPaytm.mkey}${'\n'}PAYTM_AUTH=${basicToken}${'\n'}`
         newcode = ""
-        fs.readFile('/home/snehallodaliya/Downloads/POC/POC/apiintegration/.env', 'utf8', function (err, data) {
+        fs.readFile(`${dir}.env`, 'utf8', function (err, data) {
             if (err) {
                 return console.log(err);
             }
             newcode = data + envCode
-            write(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/", './.env'), newcode);
+            write(path.join(`${dir}`, './.env'), newcode);
 
         });
 
-        fs.copyFile('/home/snehallodaliya/Downloads/POC/POC/apiintegration/paytm/PaytmChecksum.js', '/home/snehallodaliya/Downloads/POC/POC/apiintegration/ThirdPartyAPI/paytm/PaytmChecksum.js', (err) => {
-            if (err) 
+        fs.copyFile(`${dir}paytm/PaytmChecksum.js`, `${dir}ThirdPartyAPI/paytm/PaytmChecksum.js`, (err) => {
+            if (err)
                 throw err;
             console.log('source.txt was copied to destination.txt');
         });
-        
+
     } catch (error) {
         throw error;
     }
@@ -138,12 +143,12 @@ async function generateMultiplePaytmCode(APIsOfPaytm) {
         }
         let result;
         for (let i = 0; i < APIsOfPaytm.length; i++) {
-            result= await generatePaytmAPI(APIsOfPaytm[i], fileExists);
+            result = await generatePaytmAPI(APIsOfPaytm[i], fileExists);
             fileExists = true;
         }
         return (result)
     } catch (error) {
-        return error;
+        throw error;
     }
 }
 
@@ -155,34 +160,178 @@ async function generatePaytmAPI(objOfPaytmAPI, fileExists) {
         app.locals.url = objOfPaytmAPI.url;
         app.locals.methodName = objOfPaytmAPI.methodName;
         app.locals.fileExists = fileExists;
-        app.locals,queryParams=objOfPaytmAPI.queryParams;
+        app.locals, queryParams = objOfPaytmAPI.queryParams;
+        app.locals.APIType = objOfPaytmAPI.APIType;
         if (fileExists) {
             const codetest = app.render();
             var newcode;
             //saloni path =dhwaniparekh/Coruscate_Saloni
-            let data = fs.readFileSync('/home/snehallodaliya/Downloads/POC/POC/apiintegration/ThirdPartyAPI/paytm/paytm.js', 'utf8', function (err, data) {
+            let data = fs.readFileSync(`${dir}ThirdPartyAPI/paytm/paytm.js`, 'utf8', function (err, data) {
                 if (err) {
-                    return error;
+                    throw error;
                 }
                 return data;
 
             });
             var string = data.split("module.exports = {");
             newcode = string[0] + codetest + "\n" + "module.exports = {" + "\n" + "\t" + objOfPaytmAPI.methodName + "," + string[1]
-            write(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/ThirdPartyAPI/paytm/", 'paytm.js'), newcode);
+            write(path.join(`${dir}ThirdPartyAPI/paytm/`, 'paytm.js'), newcode);
         } else {
             console.log("file not exists")
-            write(path.join("/home/snehallodaliya/Downloads/POC/POC/apiintegration/ThirdPartyAPI/paytm/", 'paytm.js'), app.render());
+            write(path.join(`${dir}ThirdPartyAPI/paytm/`, 'paytm.js'), app.render());
         }
+        generateControllerCode(objOfPaytmAPI.id,objOfPaytmAPI.methodName)
         return "Success"
     } catch (error) {
         throw error;
     }
 }
 
+async function generateControllerCode(APIId,APIName) {
+    try {
+        let result = await service.getSingleDocumentById(apis, APIId);
+        result = result.toJSON();
+        let paytmObject = {};
+        for (let i = 0; i < result.parameters.length; i++) {
+            const params = result.parameters[i];
+            switch (params.type) {
+                case constant.PARAMETER_TYPE.REQUEST_PARAMETER.toString():
+                    let requestParams = result.parameters[i].parameters;
+                    let objRequestParams = {};
+                    for (let rp = 0; rp < requestParams.length; rp++) {
+                        switch (requestParams[rp].type) {
+                            case "string":
+                                objRequestParams[requestParams[rp].name] = "";
+                                break;
+                            case "number":
+                                objRequestParams[requestParams[rp].name] = "";
+                                break;
+                            case "Object":
+                                let param = await generateObjectParams(requestParams[rp]);
+                                objRequestParams[requestParams[rp].name] = param;
+                                break;
+                            case "array":
+                                let arrayObj = await generateArrayParams(requestParams[rp]);
+                                objRequestParams[requestParams[rp].name] = arrayObj;
+                                break;
+                            case "custom":
+                                objRequestParams[requestParams[rp].name] = {};
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    paytmObject["requestParams"] = objRequestParams;
+                    break;
+                case constant.PARAMETER_TYPE.PATH_PARAMETER.toString():
+                    let pathParams = result.parameters[i].parameters;
+                    let objPathParams = {};
+                    for (let pp = 0; pp < pathParams.length; pp++) {
+                        switch (pathParams[pp].type) {
+                            case "string":
+                                objPathParams[pathParams[pp].name] = ""
+                                break;
+                            case "number":
+                                objPathParams[pathParams[pp].name] = ""
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    paytmObject[pathParams] = objPathParams;
+                    break;
+                case constant.PARAMETER_TYPE.QUERY_PARAMETER.toString():
+                    let queryParams = result.parameters[i].parameters;
+                    let objQueryParams = {};
+                    for (let qp = 0; qp < queryParams.length; qp++) {
+                        switch (queryParams[qp].type) {
+                            case "string":
+                                objQueryParams[queryParams[qp].name] = ""
+                                break;
+                            case "number":
+                                objQueryParams[queryParams[qp].name] = ""
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    paytmObject["queryParams"] = objQueryParams;
+                    break;
+                default:
+            }
+        }
+        let controllerCode=`let paytmService=require('../../ThirdPartyAPI/paytm/paytm');${'\n'}let paytmObject = ${JSON.stringify(paytmObject,null,2)}${'\n'}let result=await paytmService.${APIName}(paytmObject);`
+        console.log("controllercode",controllerCode)
+        write(path.join(`${dir}controller/user/`, 'paymentController.js'), controllerCode);
+    } catch (error) {
+        throw error;
+    }
+
+}
+
+async function generateObjectParams(objOfParam) {
+    let generateObj = {};
+    let childParams = objOfParam.childParams;
+    for (let cp = 0; cp < childParams.length; cp++) {
+        switch (childParams[cp].type) {
+            case "string":
+                generateObj[childParams[cp].name] = "";
+                break;
+            case "number":
+                generateObj[childParams[cp].name] = "";
+                break;
+            case "Object":
+                let cpparam = await generateObjectParams(childParams[cp]);
+                generateObj[childParams[cp].name] = cpparam;
+                break;
+            case "array":
+                generateObj[childParams[cp].name] = [];
+                break;
+            case "custom":
+                generateObj[childParams[cp].name] = {};
+                break;
+            default:
+                break;
+        }
+    }
+    return generateObj;
+}
+
+async function generateArrayParams(objOfParam) {
+    let generateArray = [];
+    let generateObj = {};
+    let childParams = objOfParam.childParams;
+    for (let cp = 0; cp < childParams.length; cp++) {
+        switch (childParams[cp].type) {
+            case "string":
+                generateObj[childParams[cp].name] = "";
+                break;
+            case "number":
+                generateObj[childParams[cp].name] = "";
+                break;
+            case "Object":
+                let cpparam = await generateObjectParams(childParams[cp]);
+                generateObj[childParams[cp].name] = cpparam;
+                break;
+            case "array":
+                let arrayObj = await generateArrayParams(childParams[cp]);
+                generateObj[childParams[cp].name] = arrayObj;
+                break;
+            case "custom":
+                generateObj[childParams[cp].name] = {};
+                break;
+            default:
+                break;
+        }
+    }
+    generateArray.push(generateObj);
+    return generateArray;
+}
+
 module.exports = {
     initializePaytmCode,
-    generateMultiplePaytmCode
+    generateMultiplePaytmCode,
+    generateControllerCode
 }
 
 app.listen(8000);;

@@ -56,14 +56,14 @@ async function generateMultipleStripeCode(APIsOfStripe) {
         for (let i = 0; i < APIsOfStripe.length; i++) {
             await generateStripeAPI(APIsOfStripe[i], fileExists, (error, data) => {
                 if (error)
-                    return error;
+                throw error;
                 console.log(data);
             })
             fileExists = true;
         }
         return ("success")
     } catch (error) {
-        return error;
+        throw error;
     }
 }
 async function generateStripeAPI(objOfStripeAPI, fileExists) {
@@ -80,7 +80,7 @@ async function generateStripeAPI(objOfStripeAPI, fileExists) {
             var newcode;
             let data =  fs.readFileSync('/home/snehallodaliya/Downloads/POC/POC/apiintegration/ThirdPartyAPI/stripe.js', 'utf8', function (err, data) {
                 if (err) {
-                    return error;
+                    throw error;
                 }
                 return data;
 
@@ -93,7 +93,7 @@ async function generateStripeAPI(objOfStripeAPI, fileExists) {
         }
         return "Success"
     } catch (error) {
-        return error;
+        throw error;
     }
 }
 async function initializeStripeCode(detailsOfStripe) {
@@ -121,7 +121,7 @@ async function initializeStripeCode(detailsOfStripe) {
 
         });
     } catch (error) {
-        return error;
+        throw error;
     }
 
 }

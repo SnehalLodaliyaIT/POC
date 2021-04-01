@@ -26,15 +26,17 @@ async function generateCheckSum(body) {
 <%_ } %>
 async function <%- methodName %>(paytmObject){
     try {
-        paytmObject.body.mid = process.env.PAYTM_MERCHANT_ID;
-        paytmObject.body.websiteName = constants.PAYTM.WEBSITE;
-        let signature = await generateCheckSum(JSON.stringify(paytmObject.body));
-        Object.assign(paytmObject, {
+        <%_ if(APIType == 2){ %>
+        paytmObject.data.body.mid = process.env.PAYTM_MERCHANT_ID;
+        paytmObject.data.body.websiteName = constants.PAYTM.WEBSITE;
+        let signature = await generateCheckSum(JSON.stringify(paytmObject.data.body));
+        Object.assign(paytmObject.data, {
             head: {
                 "signature": signature
             }
         })
-        data = JSON.stringify(paytmObject)
+        <%_ } %>
+        data = JSON.stringify(paytmObject.data)
         
         var config = {
             method: <%= method %>,
@@ -44,17 +46,20 @@ async function <%- methodName %>(paytmObject){
             },
             data: data
         };
+        
+        <%_ if(APIType == 3){ %> config.headers[Authorization] = `Basic ${process.env.PAYTM_AUTH}`;
+        config.headers[x-device-identifier]=`${paytmObject.deviceIdentifier}`<%_ } %>
         let result =axios(config)
         .then(function (response) {
             console.log(response.data)
             return(response.data);
         })
         .catch(function (error) {
-           return(error);
+            throw(error);
         });
         return result;
     } catch (error) {
-        return error;
+        throw error;
     }
 }
 <%_ if(!fileExists){ %>
