@@ -7,7 +7,7 @@ const ejs = require('ejs');
 const util = require('util');
 const path = require('path');
 const MODE_0666 = parseInt('0666', 8);
-const dir = "/home/snehallodaliya/Downloads/POC/POC/apiintegration/";
+const dir = "/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/";
 const service = require("../utils/dbService");
 const apis = require("../model/apis")
 const constant = require("../config/constant/common")
@@ -180,18 +180,22 @@ async function generatePaytmAPI(objOfPaytmAPI, fileExists) {
             console.log("file not exists")
             write(path.join(`${dir}ThirdPartyAPI/paytm/`, 'paytm.js'), app.render());
         }
-        generateControllerCode(objOfPaytmAPI.id,objOfPaytmAPI.methodName)
+        generateControllerCode(objOfPaytmAPI.id, objOfPaytmAPI.methodName)
         return "Success"
     } catch (error) {
         throw error;
     }
 }
 
-async function generateControllerCode(APIId,APIName) {
+async function generateControllerCode(APIId, APIName) {
     try {
         let result = await service.getSingleDocumentById(apis, APIId);
         result = result.toJSON();
-        let paytmObject = {};
+        let paytmObject = {
+            data: {
+                body: {}
+            }
+        };
         for (let i = 0; i < result.parameters.length; i++) {
             const params = result.parameters[i];
             switch (params.type) {
@@ -199,14 +203,14 @@ async function generateControllerCode(APIId,APIName) {
                     let requestParams = result.parameters[i].parameters;
                     let objRequestParams = {};
                     for (let rp = 0; rp < requestParams.length; rp++) {
-                        switch (requestParams[rp].type) {
+                        switch (requestParams[rp].type.toLowerCase()) {
                             case "string":
                                 objRequestParams[requestParams[rp].name] = "";
                                 break;
                             case "number":
                                 objRequestParams[requestParams[rp].name] = "";
                                 break;
-                            case "Object":
+                            case "object":
                                 let param = await generateObjectParams(requestParams[rp]);
                                 objRequestParams[requestParams[rp].name] = param;
                                 break;
@@ -221,14 +225,14 @@ async function generateControllerCode(APIId,APIName) {
                                 break;
                         }
                     }
-                    paytmObject["requestParams"] = objRequestParams;
+                    paytmObject["data"]["body"] = objRequestParams;
                     break;
                 case constant.PARAMETER_TYPE.PATH_PARAMETER.toString():
                     let pathParams = result.parameters[i].parameters;
                     let objPathParams = {};
                     for (let pp = 0; pp < pathParams.length; pp++) {
-                        switch (pathParams[pp].type) {
-                            case "string":
+                        switch (pathParams[pp].type.toLowerCase()) {
+                            case "string" || "String":
                                 objPathParams[pathParams[pp].name] = ""
                                 break;
                             case "number":
@@ -244,11 +248,11 @@ async function generateControllerCode(APIId,APIName) {
                     let queryParams = result.parameters[i].parameters;
                     let objQueryParams = {};
                     for (let qp = 0; qp < queryParams.length; qp++) {
-                        switch (queryParams[qp].type) {
+                        switch (queryParams[qp].type.toLowerCase()) {
                             case "string":
                                 objQueryParams[queryParams[qp].name] = ""
                                 break;
-                            case "number":
+                            case "number" || "Number":
                                 objQueryParams[queryParams[qp].name] = ""
                                 break;
                             default:
@@ -260,8 +264,9 @@ async function generateControllerCode(APIId,APIName) {
                 default:
             }
         }
-        let controllerCode=`let paytmService=require('../../ThirdPartyAPI/paytm/paytm');${'\n'}let paytmObject = ${JSON.stringify(paytmObject,null,2)}${'\n'}let result=await paytmService.${APIName}(paytmObject);`
-        console.log("controllercode",controllerCode)
+        console.log(paytmObject + "paytm object");
+        let controllerCode = `let paytmService=require('../../ThirdPartyAPI/paytm/paytm');${'\n'}let paytmObject = ${JSON.stringify(paytmObject, null, 2)}${'\n'}let result=await paytmService.${APIName}(paytmObject);`
+        console.log("controllercode", controllerCode)
         write(path.join(`${dir}controller/user/`, 'paymentController.js'), controllerCode);
     } catch (error) {
         throw error;
@@ -273,14 +278,14 @@ async function generateObjectParams(objOfParam) {
     let generateObj = {};
     let childParams = objOfParam.childParams;
     for (let cp = 0; cp < childParams.length; cp++) {
-        switch (childParams[cp].type) {
-            case "string":
+        switch (childParams[cp].type.toLowerCase()) {
+            case "string" || "String":
                 generateObj[childParams[cp].name] = "";
                 break;
             case "number":
                 generateObj[childParams[cp].name] = "";
                 break;
-            case "Object":
+            case "object":
                 let cpparam = await generateObjectParams(childParams[cp]);
                 generateObj[childParams[cp].name] = cpparam;
                 break;
@@ -302,14 +307,14 @@ async function generateArrayParams(objOfParam) {
     let generateObj = {};
     let childParams = objOfParam.childParams;
     for (let cp = 0; cp < childParams.length; cp++) {
-        switch (childParams[cp].type) {
-            case "string":
+        switch (childParams[cp].type.toLowerCase()) {
+            case "string" || "String":
                 generateObj[childParams[cp].name] = "";
                 break;
             case "number":
                 generateObj[childParams[cp].name] = "";
                 break;
-            case "Object":
+            case "object":
                 let cpparam = await generateObjectParams(childParams[cp]);
                 generateObj[childParams[cp].name] = cpparam;
                 break;

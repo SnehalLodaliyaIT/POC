@@ -10,7 +10,7 @@ const mailguncode = require('../../MAILGUN/app');
 const twillocode = require('../../TWILLO/app');
 const gitlabcode = require('../../GITLAB/app');
 const paytmCode = require('../../paytm/app');
-const dir="/home/snehallodaliya/Downloads/POC/POC/apiintegration/";
+const dir = "/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/";
 
 async function loadTemplate(name) {
     console.log(__dirname);
@@ -149,12 +149,12 @@ async function generateMultipleCode(req, res) {
                                 });
                             }
                             if (!data[i].isRepeated) {
-                                
+
                                 await paytmCode.initializePaytmCode(data[i].Authentication, (error) => {
                                     res.send(error);
                                 });
                             }
-                            let result=await paytmCode.generateMultiplePaytmCode(data[i].APIs);
+                            let result = await paytmCode.generateMultiplePaytmCode(data[i].APIs);
                             res.send(result)
                         } catch (error) {
                             console.log(`An error occurred at generate ${data[i].thirdPartyAPI} 's API code...`);

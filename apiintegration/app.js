@@ -6,9 +6,11 @@ const fs = require('fs');
 const got = require("got");
 const marketPlace = require('./model/marketPlace');
 const master = require('./model/master');
+const apis = require('./model/apis');
 const _ = require('lodash');
-let dotenv=require('dotenv');
-dotenv=dotenv.config();
+let dotenv = require('dotenv');
+const service = require("./utils/dbService");
+dotenv = dotenv.config();
 //const paytm=require('./ThirdPartyAPI/paytm/paytm')
 //const stripe=require('./ThirdPartyAPI/stripe');
 
@@ -35,7 +37,7 @@ const qs = require('qs');
 app.get('/test-paytm', async (req, res) => {
 
     var data = {
-        data:{
+        data: {
             body: {
                 "requestType": "Payment",
                 "orderId": "201222234",
@@ -44,13 +46,13 @@ app.get('/test-paytm', async (req, res) => {
                 "callbackUrl": "https://merchant.com/callback"
             }
         },
-        queryParams:{
+        queryParams: {
             "orderId": "201222234"
         }
     }
-    
-       let result //=await paytm.initiateTransaction(data)
-        res.send (result);
+
+    let result //=await paytm.initiateTransaction(data)
+    res.send(result);
 })
 
 
@@ -113,12 +115,12 @@ async function createRoutes(dir) {
 
 
 app.get('/test-stripe', async (req, res) => {
-    const stripeobj={
-        "body":{},
-        "queryParams":{}
+    const stripeobj = {
+        "body": {},
+        "queryParams": {}
     }
-   let data //=await stripe.getAllCustomer(stripeobj)
-    res.send( data);
+    let data //=await stripe.getAllCustomer(stripeobj)
+    res.send(data);
 });
 
 app.get('/test-mailgun', async (req, res) => {
@@ -200,6 +202,93 @@ app.get('/test-twillo', async (req, res) => {
         });
 })
 
+async function validateParams(APIId, data) {
+    let result = await service.getSingleDocumentById(apis, APIId);
+    result = result.toJSON();
+    result = result.parameters;
+    let requiredParams = []
+    for (let i = 0; i < result.length; i++) {
+        let data = result[i].parameters;
+        for (let j = 0; j < data.length; j++) {
+            if (data[j].required) {
+                requiredParams.push(data[j].name)
+            }
+            if (data[j].childParams != []) {
+                for (let k = 0; k < data[j].childParams; k++) {
+                    requiredParams.push(data[j].childParams.name)
+                }
+            }
+        }
+    }
+    console.log(requiredParams)
+    let params = { ...data.data.body, ...data.queryParams }
+    for (let i = 0; i < requiredParams.length; i++) {
+        for (const [key, value] of Object.entries(params)) {
+            if (key == requiredParams[i]) {
+                if (!value) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+let paytmObject = {
+    "data": {
+        "body": {
+            "requestType": "Payment",
+            "mid": "NUigXp26888780822392",
+            "orderId": "110001",
+            "websiteName": "WEBSTAGING",
+            "txnAmount": {
+                "value": "1.00",
+                "currency": "INR"
+            },
+            "userInfo": {
+                "custId": "CUST_001"
+            }
+        },
+    },
+    "queryParams": {
+        "mid": "NUigXp26888780822392",
+        "orderId": "110001"
+    }
+}
+
+app.get('/test-valid', async (req, res) => {
+    let results = await validateParams("60656f92c2cdb1a6febbdbc4", paytmObject);
+    console.log(results);
+})
+
+
+// async function test() {
+//     let paytmService = require('./ThirdPartyAPI/paytm/paytm');
+// let paytmObject = {
+//     "data": {
+//         "body": {
+//             "requestType": "Payment",
+//             "mid": "NUigXp26888780822392",
+//             "orderId": "110001",
+//             "websiteName": "WEBSTAGING",
+//             "txnAmount": {
+//                 "value": "1.00",
+//                 "currency": "INR"
+//             },
+//             "userInfo": {
+//                 "custId": "CUST_001"
+//             }
+//         },
+//     },
+//     "queryParams": {
+//         "mid": "",
+//         "orderId": "110001"
+//     }
+// }
+//     let result = await paytmService.initiateTransaction(paytmObject);
+// }
+
+// test();
 
 //createRoutes("/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/");
 app.use(routes)
