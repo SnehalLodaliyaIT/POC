@@ -1,13 +1,12 @@
 const express = require('express');
 const app = express();
-const generate = require('./ChecksumGeneration');
 const constants = require('./constants')
 const fs = require('fs');
 const ejs = require('ejs');
 const util = require('util');
 const path = require('path');
 const MODE_0666 = parseInt('0666', 8);
-const dir = "/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/";
+const dir = "/home/salonisaraiya/Desktop/backup/Coruscate_Saloni/POC/POC/apiintegration/";
 const service = require("../utils/dbService");
 const apis = require("../model/apis")
 const constant = require("../config/constant/common")
@@ -32,7 +31,7 @@ app.get('/', async (req, res) => {
         },
     }
     let params = {
-        dir: "/home/dhwaniparekh/Coruscate_Saloni/POC/POC/apiintegration/paytm/"
+        dir: "/home/salonisaraiya/Desktop/backup/Coruscate_Saloni/POC/POC/apiintegration/paytm/"
     }
     let app = await loadTemplate('./paytm.js');
     app.locals.details = detailsForCode.data;
@@ -165,7 +164,7 @@ async function generatePaytmAPI(objOfPaytmAPI, fileExists) {
         if (fileExists) {
             const codetest = app.render();
             var newcode;
-            //saloni path =dhwaniparekh/Coruscate_Saloni
+           
             let data = fs.readFileSync(`${dir}ThirdPartyAPI/paytm/paytm.js`, 'utf8', function (err, data) {
                 if (err) {
                     throw error;
